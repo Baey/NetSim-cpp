@@ -1,2 +1,2 @@
 # Symulacja-sieci-projekt-cpp
-Projekt realizowany na faborkach z ZPO
+Projekt realizowany na laborkach z ZPO
