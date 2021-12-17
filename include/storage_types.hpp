@@ -7,29 +7,38 @@
 
 #include <list>
 #include <string>
+#include <utility>
 
 #include "types.hpp"
 #include "package.hpp"
+
+enum PackageQueueType {
+    LIFO, FIFO
+};
 
 /* Uważam, że klasa PackageQueue powinna dziedziczyć po IPackageQueue, bo jest ona implementacją interfejsu
  * jakim do obsługi kolejki. */
 class PackageQueue : IPackageQueue {
 public:
+    explicit PackageQueue(PackageQueueType package_queue_type) : package_queue_type_(std::move(queue_type)) {}
+
     /* Ma być dostosowanie tego typu metod w zależności od tego z jakim typem kolejki mamy do czynienia (LIFO/FIFO),
     * ale na ten moment nie wiem jak najsensowniej byłoby się tym zająć, więc implementuję tylko dla LIFO. */
-    void push(const Package product) { queue_.emplace_back(product); }
+    void push(const Package &package) { package_queue_.emplace_back(package); }
 
-    const PackageQueue &const pop() { return queue_.pop_back(); }
+    const PackageQueue &const pop() { return package_queue_.pop_back(); }
+
+    PackageQueueType string_queue() const { return package_queue_type_; }
 
 private:
-    std::list<Package> queue_;
+    std::list<Package> package_queue_;
+    std::string package_queue_type_;
 };
 
 class IPackageStockpile {
 public:
     /* Miał być alias const_iterator zdefiniowany w jako publiczny w tej klasie.
      * Nie wiem czy to powinno tak wyglądać no ale na razie tak zostawiam, bo wg Cliona inne klasy to widzą. */
-    using const_iterator = std::list<Package>::const_iterator;
 
     virtual ~IPackageStockpile() = default; // Defaultowy destruktor wirtualny
 
@@ -54,12 +63,11 @@ private:
  * oraz metodę służącą do określenia typu kolejki, dlatego uważam że IPackageQueue dziedziczy po IPackageStockpile */
 class IPackageQueue : IPackageStockpile {
 public:
-    virtual Package pop();
+    virtual Package pop() = 0;
 
-    /* Nie wiem za bardzo na ten moment jakiego typu ma zwracać wynik funkcja określająca typ kolejki.
-     * Coś tam w instrukcji było o parsowaniu pliku ze schematem fabryki i określania typu na podstawie
-     * np. ciągu znaków "LIFO", więc ustawiam na razie na string. */
-    std::string queue_type();
+private:
+
+    virtual PackageQueueType get_queue_type() = 0;
 };
 
 #endif //NETSIM_CPP_STORAGE_TYPES_HPP
