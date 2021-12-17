@@ -12,15 +12,19 @@
 
 class Package {
 public:
-    Package() {}
-    Package(id) : elementId = id {}
+    Package();
 
-    const ElementID get_id() const { return elementId; }
+    explicit Package(const ElementID id) : ElementID_(id) {}
+
+    ElementID get_id() const { return ElementID_; }
+
+    /* Tak podobno definiujemy operatory w c++ */
+    bool operator==(const Package &lhs, const Package &rhs) { return lhs.ElementID_ == rhs.ElementID_; };
 private:
-    static set<ElementID> freed_IDs_;
-    static set<ElementID> assigned_IDs_;
+    static std::set <ElementID> freed_IDs_;
+    static std::set <ElementID> assigned_IDs_;
 
-    ElementID elementId;
+    ElementID ElementID_;
 };
 
 #endif //NETSIM_CPP_PACKAGE_HPP
