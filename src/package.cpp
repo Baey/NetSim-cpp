@@ -26,3 +26,8 @@ Package::Package(const ElementID elementID) {
     assigned_IDs_.insert(elementID);
 }
 
+Package::~Package() {
+    assigned_IDs_.erase(assigned_IDs_.find(ElementID_));
+    /* Należy również dodać usunięte ID do zbioru zwolnionych identyfikatorów */
+    freed_IDs_.insert(ElementID_);
+}

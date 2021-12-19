@@ -19,7 +19,7 @@ public:
     /* Customowy destruktor, który jest konieczny żeby operowanie na feed_IDs_ i assigned_IDs_ miało
      * jakikolwiek sens. Mam nadzieję, że jak się robi własny destruktor to nie trzeba jakoś ręcznie zwlaniać
      * miejsca w pamięci przypisanego do danej instancji. */
-    ~Package() { assigned_IDs_.erase(assigned_IDs_.find(ElementID_)); }
+    ~Package();
 
     ElementID get_id() const { return ElementID_; }
 
