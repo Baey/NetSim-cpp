@@ -7,6 +7,8 @@
 Package::Package() {
     if (!freed_IDs_.empty()) {
         ElementID_ = *(freed_IDs_.begin());
+        /* Poprawka -> trzeba jeszcze dodać ID do zbioru przypisanych identyfikatorów */
+        assigned_IDs_.insert(*(freed_IDs_.begin()));
         freed_IDs_.erase(freed_IDs_.begin());
     }
     else if (!assigned_IDs_.empty()) {
