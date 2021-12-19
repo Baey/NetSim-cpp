@@ -14,7 +14,7 @@ const Package PackageQueue::pop() {
     }
 }
 /*Jak coś to jest inna implementacja LIFO i FIFO. Napisałem o tym trochę w storage_types.hpp . Jak się wam to spodoba
- * i ktoś potwieedzi, że to jest git to wystarczy to odkomentować*/
+ * i ktoś potwieedzi że to jest dobrze to wystarczy to odkomentowac plus pliki w storage_types.hpp*/
 
 
 /*const Package PackageQueue::pop() {

@@ -6,6 +6,7 @@
 #define NETSIM_CPP_TYPES_HPP
 #include <list>
 #include "package.hpp"
+
 /* Alias na unsigned int. Można pomyśleć czy zamiast u int nie dać size_t, chociaż obydwa typy
  * chyba są dokładnie tym samym, więc pewnie nie będzie róźnicy. W ogóle, czy size_t to nie
  * alias na unsigned int??? */
