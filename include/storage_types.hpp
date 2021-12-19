@@ -22,7 +22,8 @@ class IPackageStockpile {
      * zostało sprawdzone przez kogoś bardziej kompetentego odemnie bo jednak jest to kod, który dostałem od kogoś.
      * generalnie aby to działało to trzeba stworzyć (przynajmniej ja to tak rozumiem) vector, kóry będzie stosem.
      * Sam nie do końca wiem jak to działa, a implementacja jest dalsza w pliku storage_types.cpp  . Tam też kod jest
-     * zakomentowany i jak ktoś z was to potwierdzi to wtedy można to odkomentwoać*/
+     * zakomentowany i jak ktoś z was to potwierdzi to wtedy można to odkomentwoać. Jeszcze w klasie IPackageQueue jest
+     * kod do odkomentowania by to działało*/
 
 /*protected:
     std::vector<Package> pile;*/
@@ -54,8 +55,14 @@ private:
  * oraz metodę służącą do określenia typu kolejki, dlatego uważam że IPackageQueue dziedziczy po IPackageStockpile */
 class IPackageQueue : public IPackageStockpile {
 public:
-protected:
-    PackageQueueType type;
+
+    /*Jeszcze jakby to LIFO i FIFO miało działać to potrzebna jest ta część kodu*/
+
+/*protected:
+    PackageQueueType type;*/
+
+
+
 public:
     virtual Package pop() = 0;
     PackageQueueType get_queue_type();
