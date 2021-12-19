@@ -8,6 +8,7 @@
 #include <list>
 #include <string>
 #include <utility>
+#include <vector>
 
 #include "types.hpp"
 #include "package.hpp"
@@ -17,6 +18,15 @@ enum PackageQueueType {
 };
 
 class IPackageStockpile {
+    /*Okej starałem się ogarnąć to LIFO i FIFO, ale nie wiem czy ma to sens więc fajnie jakby to
+     * zostało sprawdzone przez kogoś bardziej kompetentego odemnie bo jednak jest to kod, który dostałem od kogoś.
+     * generalnie aby to działało to trzeba stworzyć (przynajmniej ja to tak rozumiem) vector, kóry będzie stosem.
+     * Sam nie do końca wiem jak to działa, a implementacja jest dalsza w pliku storage_types.cpp  . Tam też kod jest
+     * zakomentowany i jak ktoś z was to potwierdzi to wtedy można to odkomentwoać*/
+
+/*protected:
+    std::vector<Package> pile;*/
+
 public:
     /* Miał być alias const_iterator zdefiniowany w jako publiczny w tej klasie.
      * Nie wiem czy to powinno tak wyglądać no ale na razie tak zostawiam, bo wg Cliona inne klasy to widzą. */
@@ -42,11 +52,13 @@ private:
 
 /* Klasa IPackageQueue ma rozszerzać IPackageStockpile o metodę do usuwania elementu z kolejki i go zwracanie
  * oraz metodę służącą do określenia typu kolejki, dlatego uważam że IPackageQueue dziedziczy po IPackageStockpile */
-class IPackageQueue : IPackageStockpile {
+class IPackageQueue : public IPackageStockpile {
 public:
-    virtual const Package pop() = 0;
-
-    virtual PackageQueueType get_queue_type() = 0;
+protected:
+    PackageQueueType type;
+public:
+    virtual Package pop() = 0;
+    PackageQueueType get_queue_type();
 };
 
 

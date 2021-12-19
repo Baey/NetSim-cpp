@@ -23,7 +23,7 @@ public:
 
     ElementID get_id() const { return ElementID_; }
 
-    /* Chciałem zdefiniować ten operator z dwoma argumentami i zwroćić boola z porównania ich pól .ElementID
+     /*Chciałem zdefiniować ten operator z dwoma argumentami i zwroćić boola z porównania ich pól .ElementID
      * ale się wkurzał Clion, że za dużo argumentów, więc przypomniałem sobie o istnieniu czegoś takiego jak this.
      * Pojęcia nie mam czy to jest dobrze, wyjdzie w praniu. */
     bool operator==(const Package &lhs) const { return lhs.ElementID_ == this->ElementID_; };
