@@ -1,8 +1,11 @@
 //
 // Created by Błażej Szargut on 14/12/2021.
 //
-#include <list>
-#include <storage_types.hpp>
+
+#include "types.hpp"
+#include "package.hpp"
+#include "storage_types.hpp"
+
 
 /* Nie wiem co mu nie pasuje w typach w poniższych implementacjach */
 

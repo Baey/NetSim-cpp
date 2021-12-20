@@ -5,10 +5,10 @@
 #ifndef NETSIM_CPP_PACKAGE_HPP
 #define NETSIM_CPP_PACKAGE_HPP
 
-#include <vector>
-#include <numeric>
-#include <set>
 #include "types.hpp"
+//#include "storage_types.hpp"
+
+#include <set>
 
 class Package {
 public:
@@ -33,7 +33,7 @@ public:
      * miejsca w pamięci przypisanego do danej instancji. */
     ~Package();
 
-private:
+protected:
     static std::set<ElementID> freed_IDs_;
     static std::set<ElementID> assigned_IDs_;
 

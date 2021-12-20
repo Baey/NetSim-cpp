@@ -5,13 +5,10 @@
 #ifndef NETSIM_CPP_STORAGE_TYPES_HPP
 #define NETSIM_CPP_STORAGE_TYPES_HPP
 
-#include <list>
-#include <string>
-#include <utility>
-#include <vector>
-
-#include "types.hpp"
 #include "package.hpp"
+#include "types.hpp"
+
+#include <list>
 
 enum PackageQueueType {
     LIFO,

@@ -1,8 +1,9 @@
 //
 // Created by Błażej Szargut on 14/12/2021.
 //
-
-#include <package.hpp>
+#include "package.hpp"
+#include "types.hpp"
+#include <set>
 
 /* Podobno tak powinno być zgodnie z dobrymi praktykami */
 std::set<ElementID> Package::freed_IDs_;
