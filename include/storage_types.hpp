@@ -5,15 +5,19 @@
 #ifndef NETSIM_CPP_STORAGE_TYPES_HPP
 #define NETSIM_CPP_STORAGE_TYPES_HPP
 
-#include "package.hpp"
-#include "types.hpp"
-
 #include <list>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "types.hpp"
+#include "package.hpp"
 
 enum PackageQueueType {
     LIFO,
     FIFO
 };
+
 
 class IPackageStockpile {
     /*Okej starałem się ogarnąć to LIFO i FIFO, ale nie wiem czy ma to sens więc fajnie jakby to
@@ -25,6 +29,8 @@ class IPackageStockpile {
 public:
     /* Miał być alias const_iterator zdefiniowany w jako publiczny w tej klasie.
      * Nie wiem czy to powinno tak wyglądać no ale na razie tak zostawiam, bo wg Cliona inne klasy to widzą. */
+
+    using const_iterator = std::list<Package>::const_iterator; // Mój Clion nie widzi Package i nie wiem czemu ;(
 
     void push(Package &package) { package_queue_.push_back(package); }
 
