@@ -6,7 +6,7 @@
 #include "package.hpp"
 #include "storage_types.hpp"
 
-Package PackageQueue::pop() {
+Package IPackageQueue::pop() {
     if (!package_queue_.empty()) {
         /* To jest FIFO - różnica jest tylko dla metody pop! */
         if (package_queue_type_ == PackageQueueType::FIFO) {

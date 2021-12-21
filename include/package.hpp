@@ -17,7 +17,7 @@ public:
 
     explicit Package(ElementID elementID);
 
-    Package(const Package& Package) { ElementID_ = Package.ElementID_; }
+    Package(const Package& Package) : ElementID_(Package.ElementID_) {}
 
     Package operator=(const Package& other);
 

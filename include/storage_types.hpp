@@ -20,17 +20,10 @@ enum PackageQueueType {
 
 
 class IPackageStockpile {
-    /*Okej starałem się ogarnąć to LIFO i FIFO, ale nie wiem czy ma to sens więc fajnie jakby to
-     * zostało sprawdzone przez kogoś bardziej kompetentego odemnie bo jednak jest to kod, który dostałem od kogoś.
-     * generalnie aby to działało to trzeba stworzyć (przynajmniej ja to tak rozumiem) vector, kóry będzie stosem.
-     * Sam nie do końca wiem jak to działa, a implementacja jest dalsza w pliku storage_types.cpp  . Tam też kod jest
-     * zakomentowany i jak ktoś z was to potwierdzi to wtedy można to odkomentwoać*/
 
 public:
-    /* Miał być alias const_iterator zdefiniowany w jako publiczny w tej klasie.
-     * Nie wiem czy to powinno tak wyglądać no ale na razie tak zostawiam, bo wg Cliona inne klasy to widzą. */
 
-    using const_iterator = std::list<Package>::const_iterator; // Mój Clion nie widzi Package i nie wiem czemu ;(
+    using const_iterator = std::list<Package>::const_iterator;
 
     void push(Package &package) { package_queue_.push_back(package); }
 
@@ -46,7 +39,7 @@ public:
 
     const_iterator cend() const { return package_queue_.cend(); }
 
-    virtual ~IPackageStockpile() = default; // Defaultowy destruktor wirtualny
+    virtual ~IPackageStockpile() = default;
 
 protected:
 
@@ -59,7 +52,7 @@ class IPackageQueue : public IPackageStockpile {
 
 public:
 
-    virtual Package pop() = 0;
+    Package pop();
 
     PackageQueueType get_queue_type() { return package_queue_type_; }
 
@@ -79,8 +72,6 @@ public:
     explicit PackageQueue(PackageQueueType type) { package_queue_type_ = type; }
 
     //void push(const Package &package);
-
-    Package pop();
 
     // PackageQueueType package_queue_type() const { return package_queue_type_; }
 };
