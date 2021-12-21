@@ -27,6 +27,8 @@ public:
 
     void push(Package &package) { package_queue_.push_back(package); }
 
+    virtual Package pop() = 0;
+
     bool empty() { return package_queue_.empty(); }
 
     std::size_t size() { return package_queue_.size(); }
@@ -64,7 +66,7 @@ protected:
 
 /* Uważam, że klasa PackageQueue powinna dziedziczyć po IPackageQueue, bo jest ona implementacją interfejsu
  * jakim do obsługi kolejki. */
-class PackageQueue : IPackageQueue {
+class PackageQueue : public IPackageQueue {
 public:
 
     //explicit PackageQueue(PackageQueueType package_queue_type) : package_queue_type_(package_queue_type) {}
