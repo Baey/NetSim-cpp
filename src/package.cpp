@@ -16,8 +16,8 @@ Package::Package() {
         assigned_IDs_.insert(*(freed_IDs_.begin()));
         freed_IDs_.erase(freed_IDs_.begin());
     } else if (!assigned_IDs_.empty()) {
-        ElementID_ = *(assigned_IDs_.end())++;
-        assigned_IDs_.insert(*(assigned_IDs_.end())++);
+        ElementID_ = *(assigned_IDs_.end()) + 1;
+        assigned_IDs_.insert(*(assigned_IDs_.end()) + 1);
     } else {
         ElementID_ = 0;
         assigned_IDs_.insert(0);

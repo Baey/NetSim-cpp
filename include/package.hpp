@@ -25,6 +25,10 @@ public:
 
     ElementID get_id() const { return ElementID_; }
 
+    static std::set<ElementID> get_freed() { return freed_IDs_; }
+
+    static std::set<ElementID> get_assigned() { return assigned_IDs_; }
+
     ~Package();
 
 private:
