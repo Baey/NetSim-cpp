@@ -34,3 +34,8 @@ Package::~Package() {
     /* Należy również dodać usunięte ID do zbioru zwolnionych identyfikatorów */
     freed_IDs_.insert(ElementID_);
 }
+
+Package Package::operator=(const Package &other) {
+    ElementID_ = other.ElementID_;
+    return *this;
+}

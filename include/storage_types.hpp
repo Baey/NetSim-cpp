@@ -76,10 +76,7 @@ public:
 
     //explicit PackageQueue(PackageQueueType package_queue_type) : package_queue_type_(package_queue_type) {}
 
-    PackageQueue(PackageQueueType type) { package_queue_type_ = type; }
-
-    /* Ma być dostosowanie tego typu metod w zależności od tego z jakim typem kolejki mamy do czynienia (LIFO/FIFO),
-    * ale na ten moment nie wiem jak najsensowniej byłoby się tym zająć, więc implementuję tylko dla LIFO. */
+    explicit PackageQueue(PackageQueueType type) { package_queue_type_ = type; }
 
     //void push(const Package &package);
 
