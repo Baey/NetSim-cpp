@@ -39,8 +39,10 @@ Package::~Package() {
 }
 
 Package &Package::operator=(Package &&package) noexcept {
-    elementID_ = package.elementID_; // Dodać ifa
-    package.elementID_ = undefinedID_;
+    if (elementID_ != undefinedID_) {
+        elementID_ = package.elementID_;
+        package.elementID_ = undefinedID_;
+    }
     return *this;
 }
 

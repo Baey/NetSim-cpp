@@ -23,4 +23,3 @@ Package PackageQueue::pop() {
     }
     else return Package(0);
 }
-

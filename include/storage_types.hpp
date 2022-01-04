@@ -35,9 +35,9 @@ public:
 
     virtual const_iterator end() = 0;
 
-//    virtual const_iterator cbegin() = 0;
-//
-//    virtual const_iterator cend() = 0;
+    virtual const_iterator cbegin() const;
+
+    virtual const_iterator cend() const;
 
     virtual ~IPackageStockpile() = default;
 
@@ -78,9 +78,9 @@ public:
 
     const_iterator end() { return package_queue_.end(); }
 
-//    const_iterator cbegin() const { return package_queue_.cbegin(); }
-//
-//    const_iterator cend() const { return package_queue_.cend(); }
+    const_iterator cbegin() const { return package_queue_.cbegin(); }
+
+    const_iterator cend() const { return package_queue_.cend(); }
 
 private:
 
