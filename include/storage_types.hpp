@@ -35,9 +35,9 @@ public:
 
     virtual const_iterator end() = 0;
 
-    virtual const_iterator cbegin() const;
+    virtual const_iterator cbegin() const = 0;
 
-    virtual const_iterator cend() const;
+    virtual const_iterator cend() const = 0;
 
     virtual ~IPackageStockpile() = default;
 
