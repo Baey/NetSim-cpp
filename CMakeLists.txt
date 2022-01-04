@@ -8,6 +8,25 @@ include_directories(
         include
 )
 
+#Add the google test subdirectory
+add_subdirectory(NetSim_tests/lib)
+
+#include googletest/include dir
+include_directories(NetSim_tests/lib/googletest/include)
+
+#include the googlemock/include dir
+include_directories(NetSim_tests/lib/googlemock/include)
+
+##Define your executable
+#add_executable(EXECUTABLE_NAME ${SOURCE_FILES})
+#
+##Link with GoogleTest
+#target_link_libraries(EXECUTABLE_NAME gtest gtest_main)
+#
+##Link with GoogleMock
+#target_link_libraries(EXECUTABLE_NAME gmock gmock_main)
+
+
 set(SOURCE_FILES
         src/package.cpp
         src/storage_types.cpp

@@ -1,0 +1,8 @@
+# ninja log v5
+14	504	6630151463623636	CMakeFiles/NetSim.dir/main.cpp.obj	f66d2d16753481d2
+3	398	6630151462552715	CMakeFiles/NetSim.dir/src/storage_types.cpp.obj	2be8e2bc58fd1af6
+3	324	6630139676405418	CMakeFiles/NetSim.dir/src/package.cpp.obj	ace9eaabb30d07c4
+505	641	6630151464949773	NetSim.exe	881f8904834fcd4c
+19	260	6630088197023650	CMakeFiles/NetSim.dir/src/factory.cpp.obj	fc75a0c9249771b0
+20	264	6630088197053678	CMakeFiles/NetSim.dir/src/nodes.cpp.obj	640366aed3d29dd2
+3	69	6630092854283319	CMakeFiles/NetSim.dir/src/helpers.cpp.obj	8e6888af8cd8bcdb
