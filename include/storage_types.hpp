@@ -25,7 +25,7 @@ public:
 
     using const_iterator = std::list<Package>::const_iterator;
 
-    void push(Package &package) { package_queue_.push_back(package); }
+    void push(Package &package) { package_queue_.push_back(std::move(package)); }
 
     virtual Package pop() = 0;
 

@@ -17,7 +17,7 @@ Package::Package() {
         freed_IDs_.erase(freed_IDs_.begin());
     } else if (!assigned_IDs_.empty()) {
         ElementID_ = *(assigned_IDs_.end()) + 1;
-        assigned_IDs_.insert(*(assigned_IDs_.end()) + 1);
+        assigned_IDs_.insert(ElementID_);
     } else {
         ElementID_ = 0;
         assigned_IDs_.insert(0);
@@ -30,12 +30,20 @@ Package::Package(const ElementID elementID) {
 }
 
 Package::~Package() {
-    assigned_IDs_.erase(assigned_IDs_.find(ElementID_));
-    /* Należy również dodać usunięte ID do zbioru zwolnionych identyfikatorów */
-    freed_IDs_.insert(ElementID_);
+    if (ElementID_ != undefinedID_) {
+        assigned_IDs_.erase(assigned_IDs_.find(ElementID_));
+        /* Należy również dodać usunięte ID do zbioru zwolnionych identyfikatorów */
+        freed_IDs_.insert(ElementID_);
+    }
 }
 
-Package Package::operator=(const Package &other) {
-    ElementID_ = other.ElementID_;
+Package &Package::operator=(Package &&package) noexcept {
+    ElementID_ = package.ElementID_; // Dodać ifa
+    package.ElementID_ = undefinedID_;
     return *this;
+}
+
+Package::Package(Package &&Package) {
+    ElementID_ = Package.ElementID_;
+    Package.ElementID_ = undefinedID_;
 }

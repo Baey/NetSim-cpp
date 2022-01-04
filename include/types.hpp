@@ -10,7 +10,7 @@
  * chyba są dokładnie tym samym, więc pewnie nie będzie róźnicy. W ogóle, czy size_t to nie
  * alias na unsigned int??? */
 
-using ElementID = unsigned int;
+using ElementID = int;
 using ProbabilityGenerator = double;
 
 #endif //NETSIM_CPP_TYPES_HPP

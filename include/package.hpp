@@ -17,9 +17,13 @@ public:
 
     explicit Package(ElementID elementID);
 
-    Package(const Package& Package) : ElementID_(Package.ElementID_) {}
+    Package(const Package& Package) = delete;
 
-    Package operator=(const Package& other);
+    Package(Package&& Package);
+
+    Package& operator=(const Package& other) = delete;
+
+    Package& operator=(Package&&) noexcept;
 
     bool operator==(const Package &other) const { return ElementID_ == other.ElementID_ ; };
 
@@ -36,6 +40,8 @@ private:
     static std::set<ElementID> assigned_IDs_;
 
     ElementID ElementID_;
+
+    static const ElementID undefinedID_ = -1;
 };
 
 #endif //NETSIM_CPP_PACKAGE_HPP
