@@ -11,6 +11,6 @@ include_directories(
 set(SOURCE_FILES
         src/package.cpp
         src/storage_types.cpp
-        )
+        include/nodes.hpp include/helpers.hpp include/factory.hpp src/factory.cpp src/helpers.cpp src/nodes.cpp)
 
-add_executable(NetSim ${SOURCE_FILES} main.cpp)
+add_executable(NetSim ${SOURCE_FILES} main.cpp include/nodes.hpp include/helpers.hpp include/factory.hpp src/factory.cpp src/helpers.cpp src/nodes.cpp)

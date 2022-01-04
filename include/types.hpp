@@ -11,6 +11,7 @@
  * alias na unsigned int??? */
 
 using ElementID = unsigned int;
+using ProbabilityGenerator = double;
 
 #endif //NETSIM_CPP_TYPES_HPP
 
