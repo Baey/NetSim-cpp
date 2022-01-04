@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/NetSim_tests/lib
+# Install script for directory: C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/NetSim_tests/lib
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/implementation")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/NetSim")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -39,7 +39,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googlemock/cmake_install.cmake")
+  include("C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googlemock/cmake_install.cmake")
 
 endif()
 

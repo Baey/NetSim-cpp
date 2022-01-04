@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/NetSim_tests/lib/googlemock
+# Install script for directory: C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/NetSim_tests/lib/googlemock
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/implementation")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/NetSim")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,28 +38,28 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/NetSim_tests/lib/googlemock/../../../../include")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/NetSim_tests/lib/googlemock/../../../../include")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/cmake-build-debug/lib/libgmockd.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/cmake-build-debug/lib/libgmockd.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/cmake-build-debug/lib/libgmock_maind.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/cmake-build-debug/lib/libgmock_maind.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googletest/generated/gmock.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googletest/generated/gmock.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googletest/generated/gmock_main.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googletest/generated/gmock_main.pc")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/blaze/Desktop/Studia/ZPO/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googletest/cmake_install.cmake")
+  include("C:/Users/micha/Desktop/Materialy do nauki/Studia 3 semestr/Zaawansowane programowanie obiektowe/cpp/NetSim - Symulacja sieci/NetSim-cpp/cmake-build-debug/NetSim_tests/lib/googletest/cmake_install.cmake")
 
 endif()
 

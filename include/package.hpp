@@ -25,9 +25,9 @@ public:
 
     Package& operator=(Package&&) noexcept;
 
-    bool operator==(const Package &other) const { return ElementID_ == other.ElementID_ ; };
+    bool operator==(const Package &other) const { return elementID_ == other.elementID_ ; };
 
-    ElementID get_id() const { return ElementID_; }
+    ElementID get_id() const { return elementID_; }
 
     static std::set<ElementID> get_freed() { return freed_IDs_; }
 
@@ -36,12 +36,14 @@ public:
     ~Package();
 
 private:
+
+    static const ElementID undefinedID_;
+
     static std::set<ElementID> freed_IDs_;
+
     static std::set<ElementID> assigned_IDs_;
 
-    ElementID ElementID_;
-
-    static const ElementID undefinedID_ = -1;
+    ElementID elementID_;
 };
 
 #endif //NETSIM_CPP_PACKAGE_HPP

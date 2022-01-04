@@ -25,9 +25,50 @@ public:
 
     using const_iterator = std::list<Package>::const_iterator;
 
-    void push(Package &package) { package_queue_.push_back(std::move(package)); }
+    virtual void push(Package &package) = 0;
+
+    virtual bool empty() = 0;
+
+    virtual std::size_t size() = 0;
+
+    virtual const_iterator begin() = 0;
+
+    virtual const_iterator end() = 0;
+
+//    virtual const_iterator cbegin() = 0;
+//
+//    virtual const_iterator cend() = 0;
+
+    virtual ~IPackageStockpile() = default;
+
+};
+
+/* Klasa IPackageQueue ma rozszerzać IPackageStockpile o metodę do usuwania elementu z kolejki i go zwracanie
+ * oraz metodę służącą do określenia typu kolejki, dlatego uważam że IPackageQueue dziedziczy po IPackageStockpile */
+class IPackageQueue : public IPackageStockpile {
+
+public:
 
     virtual Package pop() = 0;
+
+    virtual PackageQueueType get_queue_type() = 0;
+
+};
+
+
+/* Uważam, że klasa PackageQueue powinna dziedziczyć po IPackageQueue, bo jest ona implementacją interfejsu
+ * jakim do obsługi kolejki. */
+class PackageQueue : public IPackageQueue {
+public:
+
+    explicit PackageQueue(PackageQueueType package_queue_type) : package_queue_type_(package_queue_type) {}
+
+    Package pop();
+
+    PackageQueueType get_queue_type() { return package_queue_type_; }
+
+
+    void push(Package &package) { package_queue_.push_back(std::move(package)); }
 
     bool empty() { return package_queue_.empty(); }
 
@@ -37,45 +78,15 @@ public:
 
     const_iterator end() { return package_queue_.end(); }
 
-    const_iterator cbegin() const { return package_queue_.cbegin(); }
+//    const_iterator cbegin() const { return package_queue_.cbegin(); }
+//
+//    const_iterator cend() const { return package_queue_.cend(); }
 
-    const_iterator cend() const { return package_queue_.cend(); }
-
-    virtual ~IPackageStockpile() = default;
-
-protected:
+private:
 
     std::list<Package> package_queue_;
-};
-
-/* Klasa IPackageQueue ma rozszerzać IPackageStockpile o metodę do usuwania elementu z kolejki i go zwracanie
- * oraz metodę służącą do określenia typu kolejki, dlatego uważam że IPackageQueue dziedziczy po IPackageStockpile */
-class IPackageQueue : public IPackageStockpile {
-
-public:
-
-    Package pop();
-
-    PackageQueueType get_queue_type() { return package_queue_type_; }
-
-protected:
 
     PackageQueueType package_queue_type_;
-};
-
-
-/* Uważam, że klasa PackageQueue powinna dziedziczyć po IPackageQueue, bo jest ona implementacją interfejsu
- * jakim do obsługi kolejki. */
-class PackageQueue : public IPackageQueue {
-public:
-
-    //explicit PackageQueue(PackageQueueType package_queue_type) : package_queue_type_(package_queue_type) {}
-
-    explicit PackageQueue(PackageQueueType type) { package_queue_type_ = type; }
-
-    //void push(const Package &package);
-
-    // PackageQueueType package_queue_type() const { return package_queue_type_; }
 };
 
 #endif //NETSIM_CPP_STORAGE_TYPES_HPP
