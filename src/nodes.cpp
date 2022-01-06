@@ -50,3 +50,19 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
     }
     return nullptr;
 }
+
+std::optional<Package> &PackageSender::get_sending_buffer() {
+    /** Funkcja zwracająca zawartość buforu kiedy ten nie jest pusty, w przeciwnym przypadku zwraca nullptr **/
+    return buffer_;
+}
+
+void PackageSender::send_package() {
+    //TODO
+
+}
+
+void PackageSender::push_package(PackageSender &&) {
+    /** Funkcja umieszczająca produkt w buforze **/
+    //TODO
+
+}

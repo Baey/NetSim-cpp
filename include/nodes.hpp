@@ -8,6 +8,7 @@
 #include <list>
 #include <map>
 #include <memory>
+#include <optional>
 #include "types.hpp"
 #include "package.hpp"
 #include "storage_types.hpp"
@@ -29,7 +30,7 @@ public:
 
     virtual IPackageStockpile::const_iterator cend() const = 0;
 
-    virtual void receive_package(Package&& p) = 0;
+    virtual void receive_package(Package &&p) = 0;
 
     virtual ElementID get_id() const = 0;
 
@@ -42,7 +43,7 @@ protected:
     std::list<Package> package_queue_;
 };
 
-class Storehouse : IPackageReceiver, IPackageStockpile{
+class Storehouse : IPackageReceiver, IPackageStockpile {
 public:
     Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d) : id_(id) { d_ = std::move(d); }
 
@@ -59,21 +60,31 @@ class ReceiverPreferences {
 public:
     using preferences_t = std::map<IPackageReceiver *, double>;
 
+    using const_iterator = preferences_t::const_iterator;
+
     ReceiverPreferences(ProbabilityGenerator pg = default_probability_generator()) : pg_(pg) {}
 
     void add_receiver(IPackageReceiver *r);
 
-    void remove_receiver(IPackageReceiver* r);
+    void remove_receiver(IPackageReceiver *r);
 
-    IPackageReceiver* choose_receiver();
+    IPackageReceiver *choose_receiver();
 
+    const_iterator begin() { return preferences_t_.begin(); }
 
+    const_iterator end() { return preferences_t_.end(); }
+
+    const_iterator cbegin() const { return preferences_t_.cbegin(); }
+
+    const_iterator cend() const { return preferences_t_.cend(); }
+
+protected:
     ProbabilityGenerator pg_;
 
     preferences_t preferences_t_;
 };
 
-class PackageSender : ReceiverPreferences{
+class PackageSender : ReceiverPreferences {
 public:
     PackageSender() = default;
 
@@ -81,9 +92,14 @@ public:
 
     void send_package();
 
-    void push_package(PackageSender&&);
+    void push_package(PackageSender &&);
 
+    std::optional<Package> &get_sending_buffer();
+
+protected:
     ReceiverPreferences receiver_preferences_;
+
+    std::optional<Package> buffer_ = std::nullopt;
 };
 
 class Ramp : PackageSender {
@@ -96,7 +112,7 @@ public:
 
     ElementID get_id() const { return id_; }
 
-    std::optional<Package>& get_sending_buffer();
+    std::optional<Package> &get_sending_buffer();
 
     ElementID id_;
 
@@ -107,17 +123,19 @@ class Worker : PackageSender, IPackageReceiver, IPackageQueue {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
-    void do_work(Time t);
+    void do_work(Time t) { start_time_ = t; }
 
     TimeOffset get_processing_duration() const { return pd_; }
 
-    Time get_package_processing_start_time();
+    Time get_package_processing_start_time() const { return start_time_; }
 
     ElementID get_id() const { return id_; }
 
     ElementID id_;
 
     TimeOffset pd_;
+
+    Time start_time_;
 
     std::unique_ptr<IPackageQueue> q_;
 
