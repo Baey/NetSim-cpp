@@ -21,8 +21,6 @@ enum ReceiverType {
 class IPackageReceiver {
 public:
 
-    using preferences_t = std::map<IPackageReceiver *, double>;
-
     virtual IPackageStockpile::const_iterator begin() = 0;
 
     virtual IPackageStockpile::const_iterator end() = 0;
@@ -31,7 +29,7 @@ public:
 
     virtual IPackageStockpile::const_iterator cend() const = 0;
 
-    virtual void receive_package(Package&& p);
+    virtual void receive_package(Package&& p) = 0;
 
     virtual ElementID get_id() const = 0;
 
@@ -59,8 +57,9 @@ public:
 
 class ReceiverPreferences {
 public:
+    using preferences_t = std::map<IPackageReceiver *, double>;
 
-    ReceiverPreferences(ProbabilityGenerator pg = probability_generator) : pg_(pg) {}
+    ReceiverPreferences(ProbabilityGenerator pg = default_probability_generator()) : pg_(pg) {}
 
     void add_receiver(IPackageReceiver *r);
 
@@ -71,7 +70,7 @@ public:
 
     ProbabilityGenerator pg_;
 
-//    preferences_t
+    preferences_t preferences_t_;
 };
 
 class PackageSender : ReceiverPreferences{

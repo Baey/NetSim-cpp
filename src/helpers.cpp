@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <random>
+#include <ctime>
 
 // Do generowania wysokiej jakości ciągów liczb pseudolosowych warto użyć
 // zaawansowanych generatorów, np. algorytmu Mersenne Twister.
@@ -14,8 +15,7 @@ std::random_device rd;
 std::mt19937 rng(rd());
 
 double default_probability_generator() {
+//    srand(time(0));
     // Generuj liczby pseudolosowe z przedziału [0, 1); 10 bitów losowości.
     return std::generate_canonical<double, 10>(rng);
 }
-
-//std::function<double()> probability_generator = default_probability_generator();
