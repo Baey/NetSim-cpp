@@ -12,6 +12,8 @@
 
 using ElementID = int;
 using ProbabilityGenerator = double;
+using Time = unsigned int;
+using TimeOffset = unsigned int;
 
 #endif //NETSIM_CPP_TYPES_HPP
 
