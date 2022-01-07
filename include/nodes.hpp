@@ -9,6 +9,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <utility>
 #include "types.hpp"
 #include "package.hpp"
 #include "storage_types.hpp"
@@ -16,7 +17,8 @@
 
 enum ReceiverType {
     Worker,
-    Storehouse
+    Storehouse,
+    Ramp
 };
 
 class IPackageReceiver {
@@ -34,7 +36,7 @@ public:
 
     virtual ElementID get_id() const = 0;
 
-//    virtual ReceiverType get_receiver_type() const = 0;
+    virtual ReceiverType get_receiver_type() const = 0;
 
     virtual ~IPackageReceiver() = default;
 
@@ -49,7 +51,7 @@ public:
 
     ElementID get_id() const { return id_; }
 
-//    ReceiverType get_receiver_type() const {}
+    ReceiverType get_receiver_type() const {return ReceiverType::Storehouse; }
 
     ElementID id_;
 
@@ -62,13 +64,17 @@ public:
 
     using const_iterator = preferences_t::const_iterator;
 
-    ReceiverPreferences(ProbabilityGenerator pg = default_probability_generator()) : pg_(pg) {}
+    using ProbabilityGenerator = std::function<double()>;
+
+    ReceiverPreferences(ProbabilityGenerator pg = default_probability_generator) : pg_(std::move(pg)) {}
 
     void add_receiver(IPackageReceiver *r);
 
     void remove_receiver(IPackageReceiver *r);
 
     IPackageReceiver *choose_receiver();
+
+    preferences_t& get_preferences() {return preferences_t_; }
 
     const_iterator begin() { return preferences_t_.begin(); }
 
@@ -92,7 +98,7 @@ public:
 
     void send_package();
 
-    void push_package(PackageSender &&);
+    void push_package(Package&& p);
 
     std::optional<Package> &get_sending_buffer();
 

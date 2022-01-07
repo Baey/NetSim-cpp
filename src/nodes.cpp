@@ -18,7 +18,7 @@ void ReceiverPreferences::add_receiver(IPackageReceiver *r) {
         preferences_t_[r] = 1;
     }
     else {
-        preferences_t_[r] = pg_ + 1;
+        preferences_t_[r] = pg_() + 1;
         for (auto [receiver, p] : preferences_t_) {
             p = p/preferences_t_[r];
         }
@@ -37,14 +37,13 @@ void ReceiverPreferences::remove_receiver(IPackageReceiver *r) {
         --it -> second = preferences_t_[r];
         preferences_t_.erase(r);
     }
-
 }
 
 IPackageReceiver *ReceiverPreferences::choose_receiver() {
     /** Funkcja losująca wartość prawdopodobieństwa a następnie sprawdzająca, który z odbiorców w kontenerze
      * ma wartość dystrybuanty >= wylosowanemu prawdopodobieństwu **/
 
-    ProbabilityGenerator dist = pg_;
+    double dist = pg_();
     for (auto [receiver, p] : preferences_t_) {
         if (p >= dist) return receiver;
     }
@@ -58,11 +57,20 @@ std::optional<Package> &PackageSender::get_sending_buffer() {
 
 void PackageSender::send_package() {
     //TODO
-
 }
 
-void PackageSender::push_package(PackageSender &&) {
+void PackageSender::push_package(Package&& p) {
     /** Funkcja umieszczająca produkt w buforze **/
-    //TODO
+    if(not buffer_.has_value()) {
+//    buffer_.emplace(p); <- nie wiem czemu to nie działa
+    }
+}
 
+void Ramp::deliver_goods(Time t) {
+    /** Funkcja przekazująca produkt gdy jest gotowy i tworząca nowy**/
+    if(t % di_ == 0){
+        push_package(Package(id_));
+        Package new_package;
+        id_ = new_package.get_id();
+    }
 }
