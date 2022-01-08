@@ -129,6 +129,8 @@ class Worker : PackageSender, IPackageReceiver, IPackageQueue {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
+    ReceiverType get_receiver_type() const {return ReceiverType::Worker; }
+
     void do_work(Time t) { start_time_ = t; }
 
     TimeOffset get_processing_duration() const { return pd_; }
