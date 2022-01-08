@@ -90,7 +90,7 @@ protected:
     preferences_t preferences_t_;
 };
 
-class PackageSender : ReceiverPreferences {
+class PackageSender : public ReceiverPreferences {
 public:
     PackageSender() = default;
 
@@ -125,7 +125,7 @@ public:
     TimeOffset di_;
 };
 
-class Worker : PackageSender, IPackageReceiver, IPackageQueue {
+class Worker : public PackageSender, IPackageReceiver, IPackageQueue {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 

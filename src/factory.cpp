@@ -2,10 +2,44 @@
 // Created by szczy on 04.01.2022.
 //
 
+#include <exception>
 #include "factory.hpp"
 
-bool has_reachable_storehouse(const PackageSender* sender, std::map<const PackageSender*, NodeColor>& node_colors){
-    //TODO
+//FIXME:
+// Nie da się dać const przy senderze, a tak było w skrypcie
+bool has_reachable_storehouse(/* const */PackageSender* sender, std::map<const PackageSender*, NodeColor>& node_colors){
+    if(node_colors[sender] == NodeColor::VERIFIED){
+        return true;
+    }
+    node_colors[sender] = NodeColor::VISITED;
+    if(sender->get_preferences().empty()){
+        throw std::logic_error("Sender has not got any receivers");
+    }
+    bool has_sender_at_least_one_receiver_other_than_himself = false;
+    for(auto receiver : sender->get_preferences()){
+        if(receiver.first->get_receiver_type() == ReceiverType::Storehouse){
+            has_sender_at_least_one_receiver_other_than_himself = true;
+        }
+        else if(receiver.first->get_receiver_type() == ReceiverType::Worker){
+            IPackageReceiver* receiver_ptr = receiver.first;
+            auto worker_ptr = dynamic_cast<class Worker*>(receiver_ptr);
+            auto sendrecv_ptr = dynamic_cast<PackageSender*>(worker_ptr);
+            if(sendrecv_ptr == sender){
+                continue;
+            }
+            has_sender_at_least_one_receiver_other_than_himself = true;
+            if(node_colors[sendrecv_ptr] == NodeColor::UNVISITED){
+                has_reachable_storehouse(sendrecv_ptr,node_colors);
+            }
+        }
+    }
+    node_colors[sender] = NodeColor::VERIFIED;
+    if(has_sender_at_least_one_receiver_other_than_himself){
+        return true;
+    }
+    else{
+        throw std::logic_error("Error");
+    }
 }
 
 template<class Node>
@@ -21,9 +55,24 @@ typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(Element
     return std::find_if(container_.begin(), container_.end(), [&id](const auto& elem){ return (elem.id_ == id);});
 }
 
-
 bool Factory::is_consistant() {
-    return false; //TODO
+    std::map<PackageSender*,  NodeColor> node_colors;
+    //FIXME:
+    // Nie wiem jak dostać się w tych pętlach do PackageSender* - na razie komentuję błędy
+    for(auto &ramp : ramps_){
+    //    node_colors[ramp] = NodeColor::UNVISITED;
+    }
+    for(auto &worker : workers_){
+    //    node_colors[worker] = NodeColor::UNVISITED;
+    }
+    try {
+        for(auto &ramp : ramps_){
+    //        has_reachable_storehouse(ramp, node_colors);
+        }
+    } catch(std::logic_error& ex){
+        return false;
+    }
+    return true;
 }
 
 void Factory::do_deliveries(Time t) {
