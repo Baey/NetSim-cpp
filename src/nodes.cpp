@@ -82,7 +82,6 @@ std::optional<Package> &PackageSender::get_sending_buffer() {
     return buffer_;
 }
 
-/*Myślę że ta funckja ma sporo sensu ale nie wiem czemu się wypieprza*/
 void PackageSender::send_package() {
     if (buffer_) {
         receiver_preferences_.choose_receiver()->receive_package(std::move(buffer_.value()));
@@ -100,9 +99,7 @@ void PackageSender::push_package(Package &&p) {
 void Ramp::deliver_goods(Time t) {
     /** Funkcja przekazująca produkt gdy jest gotowy i tworząca nowy**/
     if (t % di_ == 0) {
-        push_package(Package(id_));
-        Package new_package;
-        id_ = new_package.get_id();
+        push_package(Package());
     }
 }
 

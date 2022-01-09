@@ -45,7 +45,7 @@ protected:
     std::list<Package> package_queue_;
 };
 
-class Storehouse : IPackageReceiver, IPackageStockpile {
+class Storehouse : public IPackageReceiver, IPackageStockpile {
 public:
     Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d) : id_(id) { d_ = std::move(d); }
 
@@ -106,13 +106,14 @@ public:
 
     std::optional<Package> &get_sending_buffer();
 
-protected:
     ReceiverPreferences receiver_preferences_;
+
+protected:
 
     std::optional<Package> buffer_ = std::nullopt;
 };
 
-class Ramp : PackageSender {
+class Ramp : public PackageSender {
 public:
     Ramp(ElementID id, TimeOffset di) : PackageSender(), id_(id), di_(di) {}
 

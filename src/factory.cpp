@@ -12,11 +12,11 @@ bool has_reachable_storehouse(/* const */PackageSender* sender, std::map<const P
         return true;
     }
     node_colors[sender] = NodeColor::VISITED;
-    if(sender->get_preferences().empty()){
+    if(sender->receiver_preferences_.get_preferences().empty()){
         throw std::logic_error("Sender has not got any receivers");
     }
     bool has_sender_at_least_one_receiver_other_than_himself = false;
-    for(auto receiver : sender->get_preferences()){
+    for(auto receiver : sender->receiver_preferences_.get_preferences()){
         if(receiver.first->get_receiver_type() == ReceiverType::Storehouse){
             has_sender_at_least_one_receiver_other_than_himself = true;
         }
@@ -60,7 +60,7 @@ bool Factory::is_consistant() {
     //FIXME:
     // Nie wiem jak dostać się w tych pętlach do PackageSender* - na razie komentuję błędy
     for(auto &ramp : ramps_){
-    //    node_colors[ramp] = NodeColor::UNVISITED;
+//        node_colors[ramp] = NodeColor::UNVISITED;
     }
     for(auto &worker : workers_){
     //    node_colors[worker] = NodeColor::UNVISITED;
@@ -76,20 +76,33 @@ bool Factory::is_consistant() {
 }
 
 void Factory::do_deliveries(Time t) {
-    //TODO
+    for (auto &ramp : ramps_) {
+        ramp.deliver_goods(t);
+    }
 }
 
 void Factory::do_package_passing() {
-    //TODO
+    for (auto &ramp : ramps_) {
+        ramp.send_package();
+    }
+    for (auto &worker : workers_) {
+        worker.send_package();
+    }
 }
 
 
 /*Nie jestem pewien czy nie napisałem tej funckji w nodes.cpp, dla Workera a nie dla fabryki*/
 void Factory::do_work(Time t) {
-    //TODO
+    for (auto &worker : workers_) {
+        worker.do_work(t);
+    }
 }
 
 template<class Node>
 void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
-    //TODO
+    for (auto &receiver : collection) {
+        if (receiver.get_receiver_id() == id) {
+            collection.remove_by_id();
+        }
+    }
 }
