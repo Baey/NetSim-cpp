@@ -35,9 +35,7 @@ public:
 
     NodeCollection<Node>::iterator find_by_id(ElementID id);
 
-    //FIXME:
-    // nie ogarniam na jakiej zasadzie ma działać przeciążenie metody, która jednocześnie ma zwracać inny typ
-    //NodeCollection<Node>::const_iterator find_by_id(ElementID id);
+    NodeCollection<Node>::const_iterator find_by_id(ElementID id);
 
     iterator begin() { return container_.begin(); }
 
@@ -78,7 +76,7 @@ public:
 
     void add_worker(class Worker &&w) { workers_.add(std::move(w)); }
 
-    void remove_worker(ElementID id) { workers_.remove_by_id(id); } //TODO Trzeba jeszcze usunąć połączenie!
+    void remove_worker(ElementID id);
 
     NodeCollection<class Worker>::iterator find_worker_by_id(ElementID id) { return workers_.find_by_id(id); }
 
@@ -93,7 +91,7 @@ public:
 
     void add_storehouse(class Storehouse &&s) { storehouses_.add(std::move(s)); }
 
-    void remove_storehouse(ElementID id) { storehouses_.remove_by_id(id); } //TODO Trzeba jeszcze usunąć połączenie!
+    void remove_storehouse(ElementID id);
 
     NodeCollection<class Storehouse>::iterator find_storehouse_by_id(ElementID id) {
         return storehouses_.find_by_id(id);

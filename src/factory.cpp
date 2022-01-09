@@ -100,9 +100,20 @@ void Factory::do_work(Time t) {
 
 template<class Node>
 void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
-    for (auto &receiver : collection) {
-        if (receiver.get_receiver_id() == id) {
-            collection.remove_by_id();
-        }
+    for (auto &node : collection) {
+//        if (node.receiver_preferences_.get_preferences().find(id)) {
+//            collection.remove_by_id();
+//        }
     }
+}
+
+void Factory::remove_worker(ElementID id) {
+    remove_receiver(ramps_, id);
+    remove_receiver(workers_, id);
+    workers_.remove_by_id(id);
+}
+
+void Factory::remove_storehouse(ElementID id) {
+    remove_receiver(workers_, id);
+    storehouses_.remove_by_id(id);
 }
