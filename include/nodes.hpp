@@ -39,10 +39,6 @@ public:
     virtual ReceiverType get_receiver_type() const = 0;
 
     virtual ~IPackageReceiver() = default;
-
-protected:
-
-    std::list<Package> package_queue_;
 };
 
 class Storehouse : public IPackageReceiver, IPackageStockpile {
@@ -54,6 +50,14 @@ public:
     ReceiverType get_receiver_type() const {return ReceiverType::Storehouse; }
 
     void receive_package(Package&& p) { d_->push(p); }
+
+    IPackageStockpile::const_iterator begin() { return d_->begin(); }
+
+    IPackageStockpile::const_iterator end() { return d_->end(); }
+
+    IPackageStockpile::const_iterator cbegin() const { return d_->cbegin(); }
+
+    IPackageStockpile::const_iterator cend() const { return d_->cend(); }
 
 private:
     ElementID id_;
@@ -139,6 +143,14 @@ public:
     ReceiverType get_receiver_type() const {return ReceiverType::Worker; }
 
     ElementID get_receiver_id() const { return id_; }
+
+    IPackageStockpile::const_iterator begin() { return q_->begin(); }
+
+    IPackageStockpile::const_iterator end() { return q_->end(); }
+
+    IPackageStockpile::const_iterator cbegin() const { return q_->cbegin(); }
+
+    IPackageStockpile::const_iterator cend() const { return q_->cend(); }
 
     void receive_package(Package&& p) { q_->push(p); }
 
