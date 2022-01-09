@@ -88,14 +88,13 @@ void PackageSender::send_package() {
     if(buffer_){
         receiver_preferences_.choose_receiver()->receive_package(buffer_->get_id());
     }
-
 }
 
 
 void PackageSender::push_package(Package&& p) {
     /** Funkcja umieszczająca produkt w buforze **/
     if(not buffer_.has_value()) {
-//    buffer_.emplace(p); <- nie wiem czemu to nie działa
+        buffer_.emplace(p); //<- nie wiem czemu to nie działa
     }
 }
 

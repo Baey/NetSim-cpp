@@ -14,6 +14,8 @@ extern std::mt19937 rng;
 
 extern double default_probability_generator();
 
+extern ProbabilityGenerator probability_generator;
+
 //std::function<double()> propability_generator = default_probability_generator;
 
 #endif //NETSIM_HELPERS_HPP

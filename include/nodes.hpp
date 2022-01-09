@@ -32,7 +32,7 @@ public:
 
     virtual IPackageStockpile::const_iterator cend() const = 0;
 
-    virtual void receive_package(Package &&p) = 0;
+    virtual void receive_package(Package&& p) = 0;
 
     virtual ElementID get_id() const = 0;
 
@@ -127,7 +127,7 @@ public:
     TimeOffset di_;
 };
 
-class Worker : public PackageSender, IPackageReceiver, IPackageQueue {
+/*class Worker : public PackageSender, IPackageReceiver, IPackageQueue {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
@@ -151,17 +151,17 @@ private:
 
     std::unique_ptr<IPackageQueue> q_;
 
-};
+};*/
 
-//Nie podoba mi sie coś w tamtej klasie Worker i myślę że powinna wyglądać o tak jak poniżej, niestety nie działa w niej jedna
-//rzecz i nie umiem tego naprawić. Dla poniższej funkcji napisałem też w nodes.cpp funckję receive_package, ale jest zakomentowana
+//Nie podoba mi sie coś w tamtej klasie Worker i myślę że powinna wyglądać o tak jak poniżej.
+// Dla poniższej funkcji napisałem też w nodes.cpp funckję receive_package, ale jest zakomentowana
 //ponieważ dla powyższego workera poprostu się wywala
 
-/*class Worker : public IPackageReceiver, public PackageSender {
+class Worker : public IPackageReceiver, public PackageSender {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
     ElementID get_id() const override {return id_;};
-    ReceiverType get_receiver_type() const override {return Worker;};  //Ja nie rozumiem Co mu się tutaj nie podoba niestety, a jak napisze tak jak wcześniej to wyświetla mi się włąsnie jakiś błąd z override
+    ReceiverType get_receiver_type() const override {return ReceiverType::Worker; }
     void do_work(Time t);
     void receive_package(Package&& p) override;
     TimeOffset get_processing_duration() {return pd_;};
@@ -172,7 +172,7 @@ private:
     TimeOffset pd_;
     std::unique_ptr<IPackageQueue> q_;
     ReceiverType receiver_type_;
-};*/
+};
 
 
 #endif //NETSIM_NODES_HPP
