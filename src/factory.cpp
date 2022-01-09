@@ -83,6 +83,8 @@ void Factory::do_package_passing() {
     //TODO
 }
 
+
+/*Nie jestem pewien czy nie napisałem tej funckji w nodes.cpp, dla Workera a nie dla fabryki*/
 void Factory::do_work(Time t) {
     //TODO
 }

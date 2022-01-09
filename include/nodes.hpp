@@ -53,9 +53,11 @@ public:
 
     ReceiverType get_receiver_type() const {return ReceiverType::Storehouse; }
 
+private:
     ElementID id_;
 
     std::unique_ptr<IPackageStockpile> d_;
+
 };
 
 class ReceiverPreferences {
@@ -139,6 +141,8 @@ public:
 
     ElementID get_id() const { return id_; }
 
+
+private:
     ElementID id_;
 
     TimeOffset pd_;
@@ -148,6 +152,27 @@ public:
     std::unique_ptr<IPackageQueue> q_;
 
 };
+
+//Nie podoba mi sie coś w tamtej klasie Worker i myślę że powinna wyglądać o tak jak poniżej, niestety nie działa w niej jedna
+//rzecz i nie umiem tego naprawić. Dla poniższej funkcji napisałem też w nodes.cpp funckję receive_package, ale jest zakomentowana
+//ponieważ dla powyższego workera poprostu się wywala
+
+/*class Worker : public IPackageReceiver, public PackageSender {
+public:
+    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
+    ElementID get_id() const override {return id_;};
+    ReceiverType get_receiver_type() const override {return Worker;};  //Ja nie rozumiem Co mu się tutaj nie podoba niestety, a jak napisze tak jak wcześniej to wyświetla mi się włąsnie jakiś błąd z override
+    void do_work(Time t);
+    void receive_package(Package&& p) override;
+    TimeOffset get_processing_duration() {return pd_;};
+    Time get_package_processing_start_time() ; //TODO
+
+private:
+    ElementID id_;
+    TimeOffset pd_;
+    std::unique_ptr<IPackageQueue> q_;
+    ReceiverType receiver_type_;
+};*/
 
 
 #endif //NETSIM_NODES_HPP
