@@ -16,11 +16,10 @@ void ReceiverPreferences::add_receiver(IPackageReceiver *r) {
 
     if (preferences_t_.size() == 0) {
         preferences_t_[r] = 1;
-    }
-    else {
+    } else {
         preferences_t_[r] = pg_() + 1;
-        for (auto [receiver, p] : preferences_t_) {
-            p = p/preferences_t_[r];
+        for (auto[receiver, p]: preferences_t_) {
+            p = p / preferences_t_[r];
         }
     }
     /*Moim zdaniem powinno być to zrobione tak ale nie mam pewności. Jak ktoś potwierdzi tą wersję to proszę odkomentujcie.*/
@@ -42,11 +41,11 @@ void ReceiverPreferences::remove_receiver(IPackageReceiver *r) {
     //* dla każdego pozostałego odbiorcy tak aby suma wynosiła 1 *
 
     if (preferences_t_.size() != 0) {
-         /*Być może powinno się to jakoś losować wszystko od nowa, albo redukować wartość dystrybuanty
-         * dla każdego odbiorcy w kontenerze, ale doszedłem do wsniosku, że będzie łatwiej jeśli
-         * dystrybuanta wcześniejszego odbiorcy w kontenerze po prostu osiągnie wartość tej dla usuwanego.*/
+        /*Być może powinno się to jakoś losować wszystko od nowa, albo redukować wartość dystrybuanty
+        * dla każdego odbiorcy w kontenerze, ale doszedłem do wsniosku, że będzie łatwiej jeśli
+        * dystrybuanta wcześniejszego odbiorcy w kontenerze po prostu osiągnie wartość tej dla usuwanego.*/
         auto it = preferences_t_.find(r);
-        --it -> second = preferences_t_[r];
+        it->second = preferences_t_[r];
         preferences_t_.erase(r);
     }
 }
@@ -72,7 +71,7 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
      * ma wartość dystrybuanty >= wylosowanemu prawdopodobieństwu **/
 
     double dist = pg_();
-    for (auto [receiver, p] : preferences_t_) {
+    for (auto[receiver, p]: preferences_t_) {
         if (p >= dist) return receiver;
     }
     return nullptr;
@@ -85,43 +84,38 @@ std::optional<Package> &PackageSender::get_sending_buffer() {
 
 /*Myślę że ta funckja ma sporo sensu ale nie wiem czemu się wypieprza*/
 void PackageSender::send_package() {
-    if(buffer_){
-        receiver_preferences_.choose_receiver()->receive_package(buffer_->get_id());
+    if (buffer_) {
+        receiver_preferences_.choose_receiver()->receive_package(std::move(buffer_.value()));
     }
 }
 
 
-void PackageSender::push_package(Package&& p) {
+void PackageSender::push_package(Package &&p) {
     /** Funkcja umieszczająca produkt w buforze **/
-    if(not buffer_.has_value()) {
-        buffer_.emplace(p); //<- nie wiem czemu to nie działa
+    if (not buffer_.has_value()) {
+        buffer_ = std::move(p);
     }
 }
 
 void Ramp::deliver_goods(Time t) {
     /** Funkcja przekazująca produkt gdy jest gotowy i tworząca nowy**/
-    if(t % di_ == 0){
+    if (t % di_ == 0) {
         push_package(Package(id_));
         Package new_package;
         id_ = new_package.get_id();
     }
 }
 
-/*Jak coś ta funckja działa dla 2 klasy Worker, którą napisałem w nodes.hpp, tylko jest w tym momencie zakomentowana*/
-
-void Worker::receive_package(Package&& p) {
-    PackageSender::push_package(std::move(p));
-}
-
-
 /*Napisałem też taką funckję ale nie rozumiem co za bardzo się nie podoba kompilatorowi w tym momencie
- * Funckje do_work będzie pogram widział gdy odkomentujemy */
+ * Funckje do_work będzie pogram widział, gdy odkomentujemy */
 void Worker::do_work(Time t) {
-    if (t == 1) {
-        receive_package(id_);
+    if (t == 0) {
+        start_time_ = 0;
+        currently_processed_package = q_->pop();
     }
-    if (t%pd_ == 0) {
-        send_package();
-        receive_package(id_);
+    if (t % pd_ == 0) {
+        push_package(std::move(currently_processed_package));
+        start_time_ = t;
+        currently_processed_package = q_->pop();
     }
 }

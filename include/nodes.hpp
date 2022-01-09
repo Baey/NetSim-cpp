@@ -34,7 +34,7 @@ public:
 
     virtual void receive_package(Package&& p) = 0;
 
-    virtual ElementID get_id() const = 0;
+    virtual ElementID get_receiver_id() const = 0;
 
     virtual ReceiverType get_receiver_type() const = 0;
 
@@ -49,9 +49,11 @@ class Storehouse : IPackageReceiver, IPackageStockpile {
 public:
     Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d) : id_(id) { d_ = std::move(d); }
 
-    ElementID get_id() const { return id_; }
+    ElementID get_receiver_id() const { return id_; }
 
     ReceiverType get_receiver_type() const {return ReceiverType::Storehouse; }
+
+    void receive_package(Package&& p) { d_->push(p); }
 
 private:
     ElementID id_;
@@ -92,7 +94,7 @@ protected:
     preferences_t preferences_t_;
 };
 
-class PackageSender : public ReceiverPreferences {
+class PackageSender {
 public:
     PackageSender() = default;
 
@@ -120,6 +122,8 @@ public:
 
     ElementID get_id() const { return id_; }
 
+    ReceiverType get_receiver_type() const {return ReceiverType::Ramp; }
+
     std::optional<Package> &get_sending_buffer();
 
     ElementID id_;
@@ -127,20 +131,21 @@ public:
     TimeOffset di_;
 };
 
-/*class Worker : public PackageSender, IPackageReceiver, IPackageQueue {
+class Worker : public PackageSender, IPackageReceiver, IPackageQueue {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
     ReceiverType get_receiver_type() const {return ReceiverType::Worker; }
 
-    void do_work(Time t) { start_time_ = t; }
+    ElementID get_receiver_id() const { return id_; }
+
+    void receive_package(Package&& p) { q_->push(p); }
+
+    void do_work(Time t);
 
     TimeOffset get_processing_duration() const { return pd_; }
 
     Time get_package_processing_start_time() const { return start_time_; }
-
-    ElementID get_id() const { return id_; }
-
 
 private:
     ElementID id_;
@@ -151,28 +156,30 @@ private:
 
     std::unique_ptr<IPackageQueue> q_;
 
-};*/
+    Package currently_processed_package;
+
+};
 
 //Nie podoba mi sie coś w tamtej klasie Worker i myślę że powinna wyglądać o tak jak poniżej.
 // Dla poniższej funkcji napisałem też w nodes.cpp funckję receive_package, ale jest zakomentowana
 //ponieważ dla powyższego workera poprostu się wywala
 
-class Worker : public IPackageReceiver, public PackageSender {
-public:
-    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
-    ElementID get_id() const override {return id_;};
-    ReceiverType get_receiver_type() const override {return ReceiverType::Worker; }
-    void do_work(Time t);
-    void receive_package(Package&& p) override;
-    TimeOffset get_processing_duration() {return pd_;};
-    Time get_package_processing_start_time() ; //TODO
-
-private:
-    ElementID id_;
-    TimeOffset pd_;
-    std::unique_ptr<IPackageQueue> q_;
-    ReceiverType receiver_type_;
-};
+//class Worker : public IPackageReceiver, public PackageSender {
+//public:
+//    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
+//    ElementID get_id() const override {return id_;};
+//    ReceiverType get_receiver_type() const override {return ReceiverType::Worker; }
+//    void do_work(Time t);
+//    void receive_package(Package&& p) override;
+//    TimeOffset get_processing_duration() {return pd_;};
+//    Time get_package_processing_start_time() ; //TODO
+//
+//private:
+//    ElementID id_;
+//    TimeOffset pd_;
+//    std::unique_ptr<IPackageQueue> q_;
+//    ReceiverType receiver_type_;
+//};
 
 
 #endif //NETSIM_NODES_HPP
