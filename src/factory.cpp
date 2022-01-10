@@ -15,12 +15,12 @@ bool has_reachable_storehouse(const PackageSender* sender, std::map<const Packag
     }
     bool has_sender_at_least_one_receiver_other_than_himself = false;
     for(auto receiver : sender->receiver_preferences_.get_preferences()){
-        if(receiver.first->get_receiver_type() == ReceiverType::Storehouse){
+        if(receiver.first->get_receiver_type() == ReceiverType::storehouse){
             has_sender_at_least_one_receiver_other_than_himself = true;
         }
-        else if(receiver.first->get_receiver_type() == ReceiverType::Worker){
+        else if(receiver.first->get_receiver_type() == ReceiverType::worker){
             IPackageReceiver* receiver_ptr = receiver.first;
-            auto worker_ptr = dynamic_cast<class Worker*>(receiver_ptr);
+            auto worker_ptr = dynamic_cast<Worker*>(receiver_ptr);
             auto sendrecv_ptr = dynamic_cast<PackageSender*>(worker_ptr);
             if(sendrecv_ptr == sender){
                 continue;
@@ -47,9 +47,6 @@ bool Factory::is_consistant() {
     for(auto &ramp : ramps_){
         node_colors[&ramp] = NodeColor::UNVISITED;
     }
-//    std::for_each(ramps_.cbegin(), ramps_.cend(), [&node_colors](class Ramp& r){
-//        node_colors[&r] = NodeColor::UNVISITED;
-//    })
     for(auto &worker : workers_){
         node_colors[&worker] = NodeColor::UNVISITED;
     }
@@ -98,11 +95,11 @@ void Factory::remove_storehouse(ElementID id) {
 }
 
 void Factory::remove_links(IPackageReceiver *receiver) {
-    std::for_each(ramps_.begin(), ramps_.end(), [&receiver](class Ramp& ramp) {
+    std::for_each(ramps_.begin(), ramps_.end(), [&receiver](Ramp& ramp) {
         ramp.receiver_preferences_.remove_receiver(receiver);
     });
 
-    std::for_each(workers_.begin(), workers_.end(), [&receiver](class Worker& worker) {
+    std::for_each(workers_.begin(), workers_.end(), [&receiver](Worker& worker) {
         worker.receiver_preferences_.remove_receiver(receiver);
     });
 }

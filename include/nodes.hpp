@@ -16,9 +16,8 @@
 #include "helpers.hpp"
 
 enum ReceiverType {
-    Worker,
-    Storehouse,
-    Ramp
+    worker,
+    storehouse,
 };
 
 class IPackageReceiver {
@@ -47,7 +46,7 @@ public:
 
     ElementID get_id() const override { return id_; }
 
-    ReceiverType get_receiver_type() const override {return ReceiverType::Storehouse; }
+    ReceiverType get_receiver_type() const override {return ReceiverType::storehouse; }
 
     void receive_package(Package&& p) override { d_->push(p); }
 
@@ -140,7 +139,7 @@ class Worker : public PackageSender, public IPackageReceiver {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
-    ReceiverType get_receiver_type() const override {return ReceiverType::Worker; }
+    ReceiverType get_receiver_type() const override {return ReceiverType::worker; }
 
     ElementID get_id() const override { return id_; }
 

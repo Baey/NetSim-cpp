@@ -45,7 +45,7 @@ Package &Package::operator=(Package &&package) noexcept {
     return *this;
 }
 
-Package::Package(Package &&Package) {
-    elementID_ = Package.elementID_;
-    Package.elementID_ = undefinedID_;
+Package::Package(Package &&package) {
+    elementID_ = package.get_id();
+    package.elementID_ = undefinedID_;
 }

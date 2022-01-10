@@ -10,7 +10,7 @@
 #include "storage_types.hpp"
 #include "nodes.hpp"
 
-enum class NodeColor {
+enum  NodeColor {
     UNVISITED,
     VISITED,
     VERIFIED
@@ -51,55 +51,52 @@ private:
 
 };
 
-//FIXME:
-// Nie wiem czemu, żebym mógł określić tutaj gdziekolwiek typ na klasy Ramp, Worker i Storehouse
-// muszę dodawać słowo class - tak kazał kompilator - nie podoba mi się to
 class Factory {
 public:
 
     // RAMP:
 
-    void add_ramp(class Ramp &&r) { ramps_.add(std::move(r)); }
+    void add_ramp( Ramp &&r) { ramps_.add(std::move(r)); }
 
     void remove_ramp(ElementID id) { ramps_.remove_by_id(id); }
 
-    NodeCollection<class Ramp>::iterator find_ramp_by_id(ElementID id) { return ramps_.find_by_id(id); }
+    NodeCollection< Ramp>::iterator find_ramp_by_id(ElementID id) { return ramps_.find_by_id(id); }
 
-    NodeCollection<class Ramp>::const_iterator find_ramp_by_id(ElementID id) const {return ramps_.find_by_id(id); }
+    NodeCollection< Ramp>::const_iterator find_ramp_by_id(ElementID id) const {return ramps_.find_by_id(id); }
 
-    NodeCollection<class Ramp>::const_iterator ramp_cbegin() const { return ramps_.cbegin(); }
+    NodeCollection< Ramp>::const_iterator ramp_cbegin() const { return ramps_.cbegin(); }
 
-    NodeCollection<class Ramp>::const_iterator ramp_cend() const { return ramps_.cend(); }
+    NodeCollection< Ramp>::const_iterator ramp_cend() const { return ramps_.cend(); }
 
     // WORKER:
 
-    void add_worker(class Worker &&w) { workers_.add(std::move(w)); }
+    void add_worker( Worker &&w) { workers_.add(std::move(w)); }
 
     void remove_worker(ElementID id);
 
-    NodeCollection<class Worker>::iterator find_worker_by_id(ElementID id) { return workers_.find_by_id(id); }
+    NodeCollection< Worker>::iterator find_worker_by_id(ElementID id) { return workers_.find_by_id(id); }
 
-    NodeCollection<class Worker>::const_iterator find_worker_by_id(ElementID id) const {return workers_.find_by_id(id); }
+    NodeCollection< Worker>::const_iterator find_worker_by_id(ElementID id) const {return workers_.find_by_id(id); }
 
-    NodeCollection<class Worker>::const_iterator worker_cbegin() const { return workers_.cbegin(); }
+    NodeCollection< Worker>::const_iterator worker_cbegin() const { return workers_.cbegin(); }
 
-    NodeCollection<class Worker>::const_iterator worker_cend() const { return workers_.cend(); }
+    NodeCollection< Worker>::const_iterator worker_cend() const { return workers_.cend(); }
 
     // STOREHOUSE:
 
-    void add_storehouse(class Storehouse &&s) { storehouses_.add(std::move(s)); }
+    void add_storehouse( Storehouse &&s) { storehouses_.add(std::move(s)); }
 
     void remove_storehouse(ElementID id);
 
-    NodeCollection<class Storehouse>::iterator find_storehouse_by_id(ElementID id) {
+    NodeCollection< Storehouse>::iterator find_storehouse_by_id(ElementID id) {
         return storehouses_.find_by_id(id);
     }
 
-    NodeCollection<class Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const {return storehouses_.find_by_id(id); }
+    NodeCollection< Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const {return storehouses_.find_by_id(id); }
 
-    NodeCollection<class Storehouse>::const_iterator storehouse_cbegin() const { return storehouses_.cbegin(); }
+    NodeCollection< Storehouse>::const_iterator storehouse_cbegin() const { return storehouses_.cbegin(); }
 
-    NodeCollection<class Storehouse>::const_iterator storehouse_cend() const { return storehouses_.cend(); }
+    NodeCollection< Storehouse>::const_iterator storehouse_cend() const { return storehouses_.cend(); }
 
     void remove_links(IPackageReceiver* receiver);
 
@@ -118,11 +115,11 @@ private:
     template<class Node>
     void remove_receiver(NodeCollection<Node> &collection, ElementID id);
 
-    NodeCollection<class Ramp> ramps_;
+    NodeCollection< Ramp> ramps_;
 
-    NodeCollection<class Worker> workers_;
+    NodeCollection< Worker> workers_;
 
-    NodeCollection<class Storehouse> storehouses_;
+    NodeCollection< Storehouse> storehouses_;
 };
 
 template<class Node>

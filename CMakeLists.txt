@@ -12,10 +12,10 @@ include_directories(
 add_subdirectory(NetSim_tests/lib)
 
 #include googletest/include dir
-include_directories(NetSim_tests/lib/googletest/include)
+#include_directories(NetSim_tests/lib/googletest/include)
 
 #include the googlemock/include dir
-include_directories(NetSim_tests/lib/googlemock/include)
+#include_directories(NetSim_tests/lib/googlemock/include)
 
 ##Define your executable
 #add_executable(EXECUTABLE_NAME ${SOURCE_FILES})
@@ -31,5 +31,27 @@ set(SOURCE_FILES
         src/package.cpp
         src/storage_types.cpp
         include/nodes.hpp include/helpers.hpp include/factory.hpp src/factory.cpp src/helpers.cpp src/nodes.cpp)
+
+add_executable(my_project_debug ${SOURCE_FILES} main.cpp)
+
+set(SOURCES_FILES_TESTS
+        test/test_Factory.cpp
+        test/test_factory_io.cpp
+        test/test_nodes.cpp
+        test/test_package.cpp
+        test/test_storage_types.cpp
+        )
+
+add_executable(my_project_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
+
+target_include_directories(my_project_test PUBLIC
+        NetSim_tests/lib/googlemock/include
+        NetSim_tests/lib/googletest/include
+        mocks
+        )
+
+#add_subdirectory(NetSim_tests/lib)
+
+target_link_libraries(my_project_test gmock)
 
 add_executable(NetSim ${SOURCE_FILES} main.cpp include/nodes.hpp include/helpers.hpp include/factory.hpp src/factory.cpp src/helpers.cpp src/nodes.cpp)

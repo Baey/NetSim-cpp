@@ -15,11 +15,11 @@ public:
 
     Package();
 
-    explicit Package(ElementID elementID);
+    Package(ElementID elementID);
 
     Package(const Package& Package) = delete;
 
-    Package(Package&& Package);
+    Package(Package&& package);
 
     Package& operator=(const Package& other) = delete;
 
