@@ -35,7 +35,7 @@ public:
 
     NodeCollection<Node>::iterator find_by_id(ElementID id);
 
-    NodeCollection<Node>::const_iterator find_by_id(ElementID id);
+    NodeCollection<Node>::const_iterator find_by_id(ElementID id) const;
 
     iterator begin() { return container_.begin(); }
 

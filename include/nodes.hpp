@@ -82,7 +82,7 @@ public:
 
     IPackageReceiver *choose_receiver();
 
-    preferences_t& get_preferences() {return preferences_t_; }
+    const preferences_t& get_preferences() const {return preferences_t_; }
 
     const_iterator begin() { return preferences_t_.begin(); }
 

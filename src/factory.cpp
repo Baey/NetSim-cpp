@@ -7,7 +7,7 @@
 
 //FIXME:
 // Nie da się dać const przy senderze, a tak było w skrypcie
-bool has_reachable_storehouse(/* const */PackageSender* sender, std::map<const PackageSender*, NodeColor>& node_colors){
+bool has_reachable_storehouse(const PackageSender* sender, std::map<const PackageSender*, NodeColor>& node_colors){
     if(node_colors[sender] == NodeColor::VERIFIED){
         return true;
     }
@@ -60,11 +60,14 @@ bool Factory::is_consistant() {
     //FIXME:
     // Nie wiem jak dostać się w tych pętlach do PackageSender* - na razie komentuję błędy
     for(auto &ramp : ramps_){
-//        node_colors[ramp] = NodeColor::UNVISITED;
+        node_colors[&ramp] = NodeColor::UNVISITED;
     }
-    for(auto &worker : workers_){
-    //    node_colors[worker] = NodeColor::UNVISITED;
-    }
+//    std::for_each(ramps_.cbegin(), ramps_.cend(), [&node_colors](class Ramp& r){
+//        node_colors[&r] = NodeColor::UNVISITED;
+//    })
+//    for(auto &worker : workers_){
+//    //    node_colors[worker] = NodeColor::UNVISITED;
+//    }
     try {
         for(auto &ramp : ramps_){
     //        has_reachable_storehouse(ramp, node_colors);
@@ -99,13 +102,13 @@ void Factory::do_work(Time t) {
 }
 
 template<class Node>
-void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
-    for (auto &node : collection) {
-//        if (node.receiver_preferences_.get_preferences().find(id)) {
+//void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
+//    for (auto &node : collection) {
+//        if (node.receiver_preferences_.get_preferences()) {
 //            collection.remove_by_id();
 //        }
-    }
-}
+//    }
+//}
 
 void Factory::remove_worker(ElementID id) {
     remove_receiver(ramps_, id);

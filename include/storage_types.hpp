@@ -63,24 +63,24 @@ public:
 
     explicit PackageQueue(PackageQueueType package_queue_type) : package_queue_type_(package_queue_type) {}
 
-    Package pop();
+    Package pop() override;
 
-    PackageQueueType get_queue_type() { return package_queue_type_; }
+    PackageQueueType get_queue_type() override { return package_queue_type_; }
 
 
-    void push(Package &package) { package_queue_.push_back(std::move(package)); }
+    void push(Package &package) override { package_queue_.push_back(std::move(package)); }
 
-    bool empty() { return package_queue_.empty(); }
+    bool empty() override { return package_queue_.empty(); }
 
-    std::size_t size() { return package_queue_.size(); }
+    std::size_t size() override { return package_queue_.size(); }
 
-    const_iterator begin() { return package_queue_.begin(); }
+    const_iterator begin() override { return package_queue_.begin(); }
 
-    const_iterator end() { return package_queue_.end(); }
+    const_iterator end() override { return package_queue_.end(); }
 
-    const_iterator cbegin() const { return package_queue_.cbegin(); }
+    const_iterator cbegin() const override { return package_queue_.cbegin(); }
 
-    const_iterator cend() const { return package_queue_.cend(); }
+    const_iterator cend() const override { return package_queue_.cend(); }
 
 private:
 
