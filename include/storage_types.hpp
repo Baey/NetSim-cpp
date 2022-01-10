@@ -67,7 +67,6 @@ public:
 
     PackageQueueType get_queue_type() override { return package_queue_type_; }
 
-
     void push(Package &package) override { package_queue_.push_back(std::move(package)); }
 
     bool empty() override { return package_queue_.empty(); }

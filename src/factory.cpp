@@ -5,8 +5,6 @@
 #include <exception>
 #include "factory.hpp"
 
-//FIXME:
-// Nie da się dać const przy senderze, a tak było w skrypcie
 bool has_reachable_storehouse(const PackageSender* sender, std::map<const PackageSender*, NodeColor>& node_colors){
     if(node_colors[sender] == NodeColor::VERIFIED){
         return true;
@@ -55,6 +53,11 @@ typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(Element
     return std::find_if(container_.begin(), container_.end(), [&id](const auto& elem){ return (elem.id_ == id);});
 }
 
+template<class Node>
+typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id) const {
+    return std::find_if(container_.cbegin(), container_.cend(), [&id](const auto& elem){ return (elem.id_ == id);});
+}
+
 bool Factory::is_consistant() {
     std::map<PackageSender*,  NodeColor> node_colors;
     //FIXME:
@@ -65,12 +68,12 @@ bool Factory::is_consistant() {
 //    std::for_each(ramps_.cbegin(), ramps_.cend(), [&node_colors](class Ramp& r){
 //        node_colors[&r] = NodeColor::UNVISITED;
 //    })
-//    for(auto &worker : workers_){
-//    //    node_colors[worker] = NodeColor::UNVISITED;
-//    }
+    for(auto &worker : workers_){
+        node_colors[&worker] = NodeColor::UNVISITED;
+    }
     try {
         for(auto &ramp : ramps_){
-    //        has_reachable_storehouse(ramp, node_colors);
+            has_reachable_storehouse(ramp, node_colors);
         }
     } catch(std::logic_error& ex){
         return false;
@@ -102,13 +105,13 @@ void Factory::do_work(Time t) {
 }
 
 template<class Node>
-//void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
+void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
 //    for (auto &node : collection) {
 //        if (node.receiver_preferences_.get_preferences()) {
 //            collection.remove_by_id();
 //        }
 //    }
-//}
+}
 
 void Factory::remove_worker(ElementID id) {
     remove_receiver(ramps_, id);

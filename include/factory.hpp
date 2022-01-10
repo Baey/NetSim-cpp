@@ -65,8 +65,7 @@ public:
 
     NodeCollection<class Ramp>::iterator find_ramp_by_id(ElementID id) { return ramps_.find_by_id(id); }
 
-    //FIXME Ten sam problem jak powyżej w szablonie klasy:
-    //NodeCollection<class Ramp>::const_iterator find_ramp_by_id(ElementID id) {return ramps_.find_by_id(id); }
+    NodeCollection<class Ramp>::const_iterator find_ramp_by_id(ElementID id) const {return ramps_.find_by_id(id); }
 
     NodeCollection<class Ramp>::const_iterator ramp_cbegin() const { return ramps_.cbegin(); }
 
@@ -80,8 +79,7 @@ public:
 
     NodeCollection<class Worker>::iterator find_worker_by_id(ElementID id) { return workers_.find_by_id(id); }
 
-    //FIXME Ten sam problem jak powyżej w szablonie klasy:
-    //NodeCollection<class Worker>::const_iterator find_worker_by_id(ElementID id) {return workers_.find_by_id(id); }
+    NodeCollection<class Worker>::const_iterator find_worker_by_id(ElementID id) const {return workers_.find_by_id(id); }
 
     NodeCollection<class Worker>::const_iterator worker_cbegin() const { return workers_.cbegin(); }
 
@@ -97,8 +95,7 @@ public:
         return storehouses_.find_by_id(id);
     }
 
-    //FIXME Ten sam problem jak powyżej w szablonie klasy:
-    //NodeCollection<class Storehouse>::const_iterator find_storehouse_by_id(ElementID id) {return storehouses_.find_by_id(id); }
+    NodeCollection<class Storehouse>::const_iterator find_storehouse_by_id(ElementID id) const {return storehouses_.find_by_id(id); }
 
     NodeCollection<class Storehouse>::const_iterator storehouse_cbegin() const { return storehouses_.cbegin(); }
 
