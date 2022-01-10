@@ -132,6 +132,23 @@ void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
     collection.remove_by_id(id);
 }
 
+template<class Node>
+typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id) {
+    return std::find_if(container_.begin(), container_.end(), [&id](const auto& elem){ return (elem.get_id() == id);});
+}
+
+template<class Node>
+typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id) const {
+    return std::find_if(container_.cbegin(), container_.cend(), [&id](const auto& elem){ return (elem.get_id() == id);});
+}
+
+template<class Node>
+void NodeCollection<Node>::remove_by_id(ElementID id) {
+    auto it = find_by_id(id);
+    if(it != container_.end()){
+        container_.erase(it);
+    }
+}
 //bool has_reachable_storehouse(const PackageSender *sender, std::map<const PackageSender *, NodeColor> &node_colors);
 
 #endif //NETSIM_FACTORY_HPP

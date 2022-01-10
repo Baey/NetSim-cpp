@@ -40,24 +40,6 @@ bool has_reachable_storehouse(const PackageSender* sender, std::map<const Packag
     }
 }
 
-template<class Node>
-void NodeCollection<Node>::remove_by_id(ElementID id) {
-    auto it = find_by_id(id);
-    if(it != container_.end()){
-        container_.erase(it);
-    }
-}
-
-template<class Node>
-typename NodeCollection<Node>::iterator NodeCollection<Node>::find_by_id(ElementID id) {
-    return std::find_if(container_.begin(), container_.end(), [&id](const auto& elem){ return (elem.id_ == id);});
-}
-
-template<class Node>
-typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(ElementID id) const {
-    return std::find_if(container_.cbegin(), container_.cend(), [&id](const auto& elem){ return (elem.id_ == id);});
-}
-
 bool Factory::is_consistant() {
     std::map<const PackageSender*,  NodeColor> node_colors;
     //FIXME:
@@ -105,14 +87,14 @@ void Factory::do_work(Time t) {
 }
 
 void Factory::remove_worker(ElementID id) {
-    remove_receiver(ramps_, id);
+//    remove_receiver(ramps_, id);
     remove_receiver(workers_, id);
-    workers_.remove_by_id(id);
+//    workers_.remove_by_id(id);
 }
 
 void Factory::remove_storehouse(ElementID id) {
-    remove_receiver(workers_, id);
-    storehouses_.remove_by_id(id);
+    remove_receiver(storehouses_, id);
+//    storehouses_.remove_by_id(id);
 }
 
 void Factory::remove_links(IPackageReceiver *receiver) {
