@@ -59,7 +59,7 @@ typename NodeCollection<Node>::const_iterator NodeCollection<Node>::find_by_id(E
 }
 
 bool Factory::is_consistant() {
-    std::map<PackageSender*,  NodeColor> node_colors;
+    std::map<const PackageSender*,  NodeColor> node_colors;
     //FIXME:
     // Nie wiem jak dostać się w tych pętlach do PackageSender* - na razie komentuję błędy
     for(auto &ramp : ramps_){
@@ -73,7 +73,7 @@ bool Factory::is_consistant() {
     }
     try {
         for(auto &ramp : ramps_){
-            has_reachable_storehouse(ramp, node_colors);
+            has_reachable_storehouse(&ramp, node_colors);
         }
     } catch(std::logic_error& ex){
         return false;
@@ -104,15 +104,6 @@ void Factory::do_work(Time t) {
     }
 }
 
-template<class Node>
-void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
-//    for (auto &node : collection) {
-//        if (node.receiver_preferences_.get_preferences()) {
-//            collection.remove_by_id();
-//        }
-//    }
-}
-
 void Factory::remove_worker(ElementID id) {
     remove_receiver(ramps_, id);
     remove_receiver(workers_, id);
@@ -122,4 +113,14 @@ void Factory::remove_worker(ElementID id) {
 void Factory::remove_storehouse(ElementID id) {
     remove_receiver(workers_, id);
     storehouses_.remove_by_id(id);
+}
+
+void Factory::remove_links(IPackageReceiver *receiver) {
+    std::for_each(ramps_.begin(), ramps_.end(), [&receiver](class Ramp& ramp) {
+        ramp.receiver_preferences_.remove_receiver(receiver);
+    });
+
+    std::for_each(workers_.begin(), workers_.end(), [&receiver](class Worker& worker) {
+        worker.receiver_preferences_.remove_receiver(receiver);
+    });
 }

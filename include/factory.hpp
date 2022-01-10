@@ -101,6 +101,8 @@ public:
 
     NodeCollection<class Storehouse>::const_iterator storehouse_cend() const { return storehouses_.cend(); }
 
+    void remove_links(IPackageReceiver* receiver);
+
     //****************************************************************************************************************//
 
     bool is_consistant();
@@ -123,6 +125,13 @@ private:
     NodeCollection<class Storehouse> storehouses_;
 };
 
-bool has_reachable_storehouse(const PackageSender *sender, std::map<const PackageSender *, NodeColor> &node_colors);
+template<class Node>
+void Factory::remove_receiver(NodeCollection<Node> &collection, ElementID id) {
+    Node* node = &(*collection.find_by_id(id));
+    remove_links(node);
+    collection.remove_by_id(id);
+}
+
+//bool has_reachable_storehouse(const PackageSender *sender, std::map<const PackageSender *, NodeColor> &node_colors);
 
 #endif //NETSIM_FACTORY_HPP
