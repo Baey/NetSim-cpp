@@ -17,7 +17,7 @@ int main(){
     std::cout << p1.get_id() << ' ' << p2.get_id() << ' ' << p3.get_id() << ' ' << p4.get_id() << ' ' <<std::endl;
     PackageQueue queue_1(LIFO);
     PackageQueue queue_2(FIFO);
-//    queue_1.push(Package(1));
+    queue_1.push(Package(1));
     queue_1.push(p3);
     queue_1.push(p2);
     queue_1.push(p1);

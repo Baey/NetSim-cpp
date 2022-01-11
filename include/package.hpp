@@ -17,15 +17,15 @@ public:
 
     Package(ElementID elementID);
 
-    Package(const Package& Package) = delete;
+    Package(const Package &Package) = delete;
 
-    Package(Package&& package);
+    Package(Package &&package) noexcept { elementID_ = std::exchange(package.elementID_, undefinedID_); }
 
-    Package& operator=(const Package& other) = delete;
+    Package &operator=(const Package &other) = delete;
 
-    Package& operator=(Package&&) noexcept;
+    Package &operator=(Package &&) noexcept;
 
-    bool operator==(const Package &other) const { return elementID_ == other.elementID_ ; };
+    bool operator==(const Package &other) const { return elementID_ == other.elementID_; };
 
     ElementID get_id() const { return elementID_; }
 

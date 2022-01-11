@@ -35,19 +35,19 @@ set(SOURCE_FILES
 add_executable(my_project_debug ${SOURCE_FILES} main.cpp)
 
 set(SOURCES_FILES_TESTS
-        test/test_Factory.cpp
-        test/test_factory_io.cpp
-        test/test_nodes.cpp
-        test/test_package.cpp
-        test/test_storage_types.cpp
+        NetSim_tests/test/test_Factory.cpp
+        NetSim_tests/test/test_factory_io.cpp
+        NetSim_tests/test/test_nodes.cpp
+        NetSim_tests/test/test_package.cpp
+        NetSim_tests/test/test_storage_types.cpp
         )
 
-add_executable(my_project_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} test/main_gtest.cpp)
+add_executable(my_project_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} NetSim_tests/test/main_gtest.cpp)
 
 target_include_directories(my_project_test PUBLIC
         NetSim_tests/lib/googlemock/include
         NetSim_tests/lib/googletest/include
-        mocks
+        NetSim_tests/mocks
         )
 
 #add_subdirectory(NetSim_tests/lib)
