@@ -16,11 +16,11 @@ Package::Package() {
         assigned_IDs_.insert(*(freed_IDs_.begin()));
         freed_IDs_.erase(freed_IDs_.begin());
     } else if (!assigned_IDs_.empty()) {
-        elementID_ = *(assigned_IDs_.end());
+        elementID_ = *std::prev((assigned_IDs_.end())) + 1;
         assigned_IDs_.insert(elementID_);
     } else {
-        elementID_ = 0;
-        assigned_IDs_.insert(0);
+        elementID_ = 1;
+        assigned_IDs_.insert(1);
     }
 }
 
