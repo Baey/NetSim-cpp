@@ -31,7 +31,7 @@ public:
 
     virtual IPackageStockpile::const_iterator cend() const = 0;
 
-    virtual void receive_package(Package&& p) = 0;
+    virtual void receive_package(Package &&p) = 0;
 
     virtual ElementID get_id() const = 0;
 
@@ -42,13 +42,14 @@ public:
 
 class Storehouse : public IPackageReceiver {
 public:
-    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueue(LIFO))) : id_(id) { d_ = std::move(d); }
+    Storehouse(ElementID id, std::unique_ptr<IPackageStockpile> d = std::make_unique<PackageQueue>(PackageQueue(LIFO)))
+            : id_(id) { d_ = std::move(d); }
 
     ElementID get_id() const override { return id_; }
 
-    ReceiverType get_receiver_type() const override {return ReceiverType::storehouse; }
+    ReceiverType get_receiver_type() const override { return ReceiverType::storehouse; }
 
-    void receive_package(Package&& p) override { d_->push(std::move(p)); }
+    void receive_package(Package &&p) override { d_->push(std::move(p)); }
 
     IPackageStockpile::const_iterator begin() override { return d_->begin(); }
 
@@ -81,7 +82,7 @@ public:
 
     IPackageReceiver *choose_receiver();
 
-    const preferences_t& get_preferences() const {return preferences_t_; }
+    const preferences_t &get_preferences() const { return preferences_t_; }
 
     const_iterator begin() { return preferences_t_.begin(); }
 
@@ -105,7 +106,7 @@ public:
 
     void send_package();
 
-    void push_package(Package&& p);
+    void push_package(Package &&p);
 
     std::optional<Package> &get_sending_buffer();
 
@@ -139,7 +140,7 @@ class Worker : public PackageSender, public IPackageReceiver {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
-    ReceiverType get_receiver_type() const override {return ReceiverType::worker; }
+    ReceiverType get_receiver_type() const override { return ReceiverType::worker; }
 
     ElementID get_id() const override { return id_; }
 
@@ -151,7 +152,7 @@ public:
 
     IPackageStockpile::const_iterator cend() const override { return q_->cend(); }
 
-    void receive_package(Package&& p) override { q_->push(std::move(p)); }
+    void receive_package(Package &&p) override { q_->push(std::move(p)); }
 
     void do_work(Time t);
 
@@ -171,27 +172,5 @@ private:
     Package currently_processed_package;
 
 };
-
-//Nie podoba mi sie coś w tamtej klasie Worker i myślę że powinna wyglądać o tak jak poniżej.
-// Dla poniższej funkcji napisałem też w nodes.cpp funckję receive_package, ale jest zakomentowana
-//ponieważ dla powyższego workera poprostu się wywala
-
-//class Worker : public IPackageReceiver, public PackageSender {
-//public:
-//    Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
-//    ElementID get_id() const override {return id_;};
-//    ReceiverType get_receiver_type() const override {return ReceiverType::Worker; }
-//    void do_work(Time t);
-//    void receive_package(Package&& p) override;
-//    TimeOffset get_processing_duration() {return pd_;};
-//    Time get_package_processing_start_time() ; //TODO
-//
-//private:
-//    ElementID id_;
-//    TimeOffset pd_;
-//    std::unique_ptr<IPackageQueue> q_;
-//    ReceiverType receiver_type_;
-//};
-
 
 #endif //NETSIM_NODES_HPP
