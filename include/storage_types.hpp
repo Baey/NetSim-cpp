@@ -25,7 +25,7 @@ public:
 
     using const_iterator = std::list<Package>::const_iterator;
 
-    virtual void push(Package &package) = 0;
+    virtual void push(Package &&package) = 0;
 
     virtual bool empty() = 0;
 
@@ -67,7 +67,7 @@ public:
 
     PackageQueueType get_queue_type() override { return package_queue_type_; }
 
-    void push(Package &package) override { package_queue_.push_back(std::move(package)); }
+    void push(Package &&package) override { package_queue_.push_back(std::move(package)); }
 
     bool empty() override { return package_queue_.empty(); }
 

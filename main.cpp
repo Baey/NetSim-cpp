@@ -18,14 +18,14 @@ int main(){
     PackageQueue queue_1(LIFO);
     PackageQueue queue_2(FIFO);
     queue_1.push(Package(1));
-    queue_1.push(p3);
-    queue_1.push(p2);
-    queue_1.push(p1);
-    Package p55 = queue_1.pop();
-    queue_2.push(p4);
-    queue_2.push(p3);
-    queue_2.push(p2);
-    queue_2.push(p1);
+    queue_1.push(std::move(p3));
+//    queue_1.push(p2);
+//    queue_1.push(p1);
+//    Package p55 = queue_1.pop();
+//    queue_2.push(p4);
+//    queue_2.push(p3);
+//    queue_2.push(p2);
+//    queue_2.push(p1);
     queue_2.pop();
     for(const auto & it : queue_1) {
         std::cout << it.get_id() << ' ';

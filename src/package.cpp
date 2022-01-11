@@ -24,7 +24,7 @@ Package::Package() {
     }
 }
 
-Package::Package(const ElementID elementID) {
+Package::Package(ElementID elementID) {
     elementID_ = elementID;
     assigned_IDs_.insert(elementID);
 }
@@ -44,8 +44,3 @@ Package &Package::operator=(Package &&package) noexcept {
     }
     return *this;
 }
-
-//Package::Package(Package &&package) noexcept {
-//    elementID_ = std::exchange(package.elementID_, undefinedID_);
-////    package.elementID_ = undefinedID_;
-//}

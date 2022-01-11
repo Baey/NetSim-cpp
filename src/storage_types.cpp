@@ -21,5 +21,5 @@ Package PackageQueue::pop() {
             return package;
         }
     }
-    else return Package(0);
+    else return Package(-1);
 }

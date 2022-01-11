@@ -48,7 +48,7 @@ public:
 
     ReceiverType get_receiver_type() const override {return ReceiverType::storehouse; }
 
-    void receive_package(Package&& p) override { d_->push(p); }
+    void receive_package(Package&& p) override { d_->push(std::move(p)); }
 
     IPackageStockpile::const_iterator begin() override { return d_->begin(); }
 
@@ -151,7 +151,7 @@ public:
 
     IPackageStockpile::const_iterator cend() const override { return q_->cend(); }
 
-    void receive_package(Package&& p) override { q_->push(p); }
+    void receive_package(Package&& p) override { q_->push(std::move(p)); }
 
     void do_work(Time t);
 
