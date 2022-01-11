@@ -28,16 +28,27 @@ add_subdirectory(NetSim_tests/lib)
 
 
 set(SOURCE_FILES
+        include/types.hpp
+        include/package.hpp
+        include/storage_types.hpp
+        include/nodes.hpp
+        include/helpers.hpp
+        include/factory.hpp
+        include/reports.hpp
+
         src/package.cpp
         src/storage_types.cpp
-        include/nodes.hpp include/helpers.hpp include/factory.hpp src/factory.cpp src/helpers.cpp src/nodes.cpp)
+        src/nodes.cpp
+        src/factory.cpp
+        src/helpers.cpp
+        src/reports.cpp)
 
 add_executable(my_project_debug ${SOURCE_FILES} main.cpp)
 
 set(SOURCES_FILES_TESTS
 #        NetSim_tests/test/test_Factory.cpp
 #        NetSim_tests/test/test_factory_io.cpp
-#        NetSim_tests/test/test_nodes.cpp
+        NetSim_tests/test/test_nodes.cpp
         NetSim_tests/test/test_package.cpp
         NetSim_tests/test/test_storage_types.cpp
         )
@@ -54,4 +65,4 @@ target_include_directories(my_project_test PUBLIC
 
 target_link_libraries(my_project_test gmock)
 
-add_executable(NetSim ${SOURCE_FILES} main.cpp include/nodes.hpp include/helpers.hpp include/factory.hpp src/factory.cpp src/helpers.cpp src/nodes.cpp)
+add_executable(NetSim ${SOURCE_FILES})
