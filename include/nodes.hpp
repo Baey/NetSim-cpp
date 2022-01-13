@@ -11,21 +11,21 @@
 #include <optional>
 #include <utility>
 #include "types.hpp"
-#include "package.hpp"
 #include "storage_types.hpp"
 #include "helpers.hpp"
+#include "config.hpp"
 
 enum ReceiverType {
-    worker,
-    storehouse,
+    WORKER,
+    STOREHOUSE,
 };
 
 class IPackageReceiver {
 public:
 
-    virtual IPackageStockpile::const_iterator begin() = 0;
+    virtual IPackageStockpile::const_iterator begin() const = 0;
 
-    virtual IPackageStockpile::const_iterator end() = 0;
+    virtual IPackageStockpile::const_iterator end() const = 0;
 
     virtual IPackageStockpile::const_iterator cbegin() const = 0;
 
@@ -47,13 +47,13 @@ public:
 
     ElementID get_id() const override { return id_; }
 
-    ReceiverType get_receiver_type() const override { return ReceiverType::storehouse; }
+    ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
 
     void receive_package(Package &&p) override { d_->push(std::move(p)); }
 
-    IPackageStockpile::const_iterator begin() override { return d_->begin(); }
+    IPackageStockpile::const_iterator begin() const override { return d_->begin(); }
 
-    IPackageStockpile::const_iterator end() override { return d_->end(); }
+    IPackageStockpile::const_iterator end() const override { return d_->end(); }
 
     IPackageStockpile::const_iterator cbegin() const override { return d_->cbegin(); }
 
@@ -84,9 +84,9 @@ public:
 
     const preferences_t &get_preferences() const { return preferences_t_; }
 
-    const_iterator begin() { return preferences_t_.begin(); }
+    const_iterator begin() const { return preferences_t_.begin(); }
 
-    const_iterator end() { return preferences_t_.end(); }
+    const_iterator end() const { return preferences_t_.end(); }
 
     const_iterator cbegin() const { return preferences_t_.cbegin(); }
 
@@ -140,13 +140,13 @@ class Worker : public PackageSender, public IPackageReceiver {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
-    ReceiverType get_receiver_type() const override { return ReceiverType::worker; }
+    ReceiverType get_receiver_type() const override { return ReceiverType::WORKER; }
 
     ElementID get_id() const override { return id_; }
 
-    IPackageStockpile::const_iterator begin() override { return q_->begin(); }
+    IPackageStockpile::const_iterator begin() const override { return q_->begin(); }
 
-    IPackageStockpile::const_iterator end() override { return q_->end(); }
+    IPackageStockpile::const_iterator end() const override { return q_->end(); }
 
     IPackageStockpile::const_iterator cbegin() const override { return q_->cbegin(); }
 

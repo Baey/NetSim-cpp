@@ -106,8 +106,8 @@ void Ramp::deliver_goods(Time t) {
 /*Napisałem też taką funckję ale nie rozumiem co za bardzo się nie podoba kompilatorowi w tym momencie
  * Funckje do_work będzie pogram widział, gdy odkomentujemy */
 void Worker::do_work(Time t) {
-    if (t == 0) {
-        start_time_ = 0;
+    if (t == 1) {
+        start_time_ = 1;
         currently_processed_package = q_->pop();
     }
     if (t % pd_ == 0) {

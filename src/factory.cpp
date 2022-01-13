@@ -15,9 +15,9 @@ bool has_reachable_storehouse(const PackageSender *sender, std::map<const Packag
     }
     bool has_sender_at_least_one_receiver_other_than_himself = false;
     for (auto receiver: sender->receiver_preferences_.get_preferences()) {
-        if (receiver.first->get_receiver_type() == ReceiverType::storehouse) {
+        if (receiver.first->get_receiver_type() == ReceiverType::STOREHOUSE) {
             has_sender_at_least_one_receiver_other_than_himself = true;
-        } else if (receiver.first->get_receiver_type() == ReceiverType::worker) {
+        } else if (receiver.first->get_receiver_type() == ReceiverType::WORKER) {
             IPackageReceiver *receiver_ptr = receiver.first;
             auto worker_ptr = dynamic_cast<Worker *>(receiver_ptr);
             auto sendrecv_ptr = dynamic_cast<PackageSender *>(worker_ptr);
