@@ -54,22 +54,6 @@ void ReceiverPreferences::remove_receiver(IPackageReceiver *r) {
     }
 }
 
-/*Nie wiem czy ta funkcja wyżej już działa poprawnie ale wydaje mi się że to co tutaj napisałem powinno działać ale też
- * wypadałoby to potwierdzić*/
-
-/*void ReceiverPreferences::remove_receiver (IPackageReceiver* r) {
-    preferences_t_.erase(r);
-    if (preferences_t_.size() != 0) {
-        double sum_pf_ps = 0;
-        for (auto [receiver, p] : preferences_t_) {
-            sum_pf_ps += p;
-        }
-        for (auto [receiver, p] : preferences_t_) {
-            p = p/sum_pf_ps;
-        }
-    }
-}*/
-
 IPackageReceiver *ReceiverPreferences::choose_receiver() {
     /** Funkcja losująca wartość prawdopodobieństwa a następnie sprawdzająca, który z odbiorców w kontenerze
      * ma wartość dystrybuanty >= wylosowanemu prawdopodobieństwu **/

@@ -38,7 +38,7 @@ bool has_reachable_storehouse(const PackageSender *sender, std::map<const Packag
     }
 }
 
-bool Factory::is_consistant() {
+bool Factory::is_consistent() {
     std::map<const PackageSender *, NodeColor> node_colors;
     for (auto &ramp: ramps_) {
         node_colors[&ramp] = NodeColor::UNVISITED;
