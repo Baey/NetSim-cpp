@@ -3,6 +3,8 @@
 //
 
 #include <exception>
+#include <sstream>
+#include <iostream>
 #include "factory.hpp"
 
 bool has_reachable_storehouse(const PackageSender *sender, std::map<const PackageSender *, NodeColor> &node_colors) {
@@ -15,9 +17,9 @@ bool has_reachable_storehouse(const PackageSender *sender, std::map<const Packag
     }
     bool has_sender_at_least_one_receiver_other_than_himself = false;
     for (auto receiver: sender->receiver_preferences_.get_preferences()) {
-        if (receiver.first->get_receiver_type() == ReceiverType::STOREHOUSE) {
+        if (receiver.first->get_receiver_type() == ElementType::STOREHOUSE) {
             has_sender_at_least_one_receiver_other_than_himself = true;
-        } else if (receiver.first->get_receiver_type() == ReceiverType::WORKER) {
+        } else if (receiver.first->get_receiver_type() == ElementType::WORKER) {
             IPackageReceiver *receiver_ptr = receiver.first;
             auto worker_ptr = dynamic_cast<Worker *>(receiver_ptr);
             auto sendrecv_ptr = dynamic_cast<PackageSender *>(worker_ptr);
@@ -98,4 +100,54 @@ void Factory::remove_links(IPackageReceiver *receiver) {
     std::for_each(workers_.begin(), workers_.end(), [&receiver](Worker &worker) {
         worker.receiver_preferences_.remove_receiver(receiver);
     });
+}
+
+//TODO
+//Factory load_factory_structure(std::istream &is) {
+//    return Factory();
+//}
+
+//TODO
+//void save_factory_structure(Factory &factory, std::ostream &os) {
+//
+//}
+
+ParsedLineData parse_line(std::string line) {
+    ParsedLineData data;
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream token_stream(line);
+    char delimiter = ' ';
+    while (std::getline(token_stream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    std::string r("LOADING_RAMP"), w("WORKER"), s("STOREHOUSE"), l("LINK");
+    if(tokens.front() == r){
+        data.element_type_ = ElementType::LOADING_RAMP;
+    }
+    else if (tokens.front() == w){
+        data.element_type_ = ElementType::WORKER;
+    }
+    else if (tokens.front() == s){
+        data.element_type_ = ElementType::STOREHOUSE;
+    }
+    else if (tokens.front() == l){
+        data.element_type_ = ElementType::LINK;
+    }
+    else{
+        throw std::invalid_argument("Invalid element type");
+    }
+    for (auto it = std::next(tokens.begin()); it != tokens.end(); ++it) {
+        std::vector<std::string> separated_keys_and_values;
+        std::istringstream key_and_value(*it);
+        char eq = '=';
+        while (std::getline(key_and_value, token, eq)) {
+            separated_keys_and_values.push_back(token);
+        }
+        if(separated_keys_and_values.size() != 2){
+            throw std::invalid_argument("Too many \"=\" signs");
+        }
+        data.parameters_[separated_keys_and_values.front()] = separated_keys_and_values.back();
+    }
+    return data;
 }

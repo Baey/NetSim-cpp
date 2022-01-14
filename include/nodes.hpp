@@ -15,9 +15,11 @@
 #include "helpers.hpp"
 #include "config.hpp"
 
-enum ReceiverType {
+enum ElementType {
+    LOADING_RAMP,
     WORKER,
     STOREHOUSE,
+    LINK
 };
 
 class IPackageReceiver {
@@ -35,7 +37,7 @@ public:
 
     virtual ElementID get_id() const = 0;
 
-    virtual ReceiverType get_receiver_type() const = 0;
+    virtual ElementType get_receiver_type() const = 0;
 
     virtual ~IPackageReceiver() = default;
 };
@@ -47,7 +49,7 @@ public:
 
     ElementID get_id() const override { return id_; }
 
-    ReceiverType get_receiver_type() const override { return ReceiverType::STOREHOUSE; }
+    ElementType get_receiver_type() const override { return ElementType::STOREHOUSE; }
 
     void receive_package(Package &&p) override { d_->push(std::move(p)); }
 
@@ -127,7 +129,7 @@ public:
 
     ElementID get_id() const { return id_; }
 
-//    ReceiverType get_receiver_type() const {return ReceiverType::Ramp; }
+//    ElementType get_receiver_type() const {return ElementType::Ramp; }
 
 //    std::optional<Package> &get_sending_buffer();
 
@@ -140,7 +142,7 @@ class Worker : public PackageSender, public IPackageReceiver {
 public:
     Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q);
 
-    ReceiverType get_receiver_type() const override { return ReceiverType::WORKER; }
+    ElementType get_receiver_type() const override { return ElementType::WORKER; }
 
     ElementID get_id() const override { return id_; }
 
@@ -159,6 +161,8 @@ public:
     TimeOffset get_processing_duration() const { return pd_; }
 
     Time get_package_processing_start_time() const { return start_time_; }
+
+    IPackageQueue* get_queue() const {return q_.get(); }
 
 private:
     ElementID id_;

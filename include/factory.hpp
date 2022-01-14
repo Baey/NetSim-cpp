@@ -16,6 +16,11 @@ enum NodeColor {
     VERIFIED
 };
 
+struct ParsedLineData {
+    ElementType element_type_;
+    std::map<std::string, std::string>  parameters_;
+};
+
 template<class Node>
 class NodeCollection {
 public:
@@ -150,5 +155,11 @@ void NodeCollection<Node>::remove_by_id(ElementID id) {
     }
 }
 //bool has_reachable_storehouse(const PackageSender *sender, std::map<const PackageSender *, NodeColor> &node_colors);
+
+Factory load_factory_structure(std::istream& is);
+
+void save_factory_structure(Factory& factory, std::ostream& os);
+
+ParsedLineData parse_line(std::string line);
 
 #endif //NETSIM_FACTORY_HPP
