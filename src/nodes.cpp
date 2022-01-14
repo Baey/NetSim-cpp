@@ -11,45 +11,21 @@ Worker::Worker(ElementID id, TimeOffset pd, std::unique_ptr<IPackageQueue> q) : 
 }
 
 void ReceiverPreferences::add_receiver(IPackageReceiver *r) {
-    /** Funkcja dodająca odbiorcę do kontenera preferences_t_ i zmieniająca wrtości dystrybuanty
+    /** Funkcja dodająca odbiorcę do kontenera preferences_t_ i zmieniająca wrtości prawdopodobieństwa
      * dla każdego odbiorcy tak aby suma wynosiła 1 **/
-
-//    if (preferences_t_.size() == 0) {
-//        preferences_t_[r] = 1;
-//    } else {
-//        preferences_t_[r] = pg_() + 1;
-//        double denominator = preferences_t_[r];
-//        for (auto[receiver, p]: preferences_t_) {
-//            p = p / denominator;
-//            preferences_t_[receiver] = p;
-//        }
-//    }
-    /* Nie wiem jak to ostatecznie powinno wyglądać, ale to jest wersja bez losowości, żeby przesła testy i Szmuksta się nie
-     * w****iał bez powodu ;).*/
-    if (preferences_t_.size() == 0) {
-        preferences_t_[r] = 1;
-    } else {
-        preferences_t_[r] = 1;
-        double i = 1;
-        for (auto[receiver, p]: preferences_t_) {
-            preferences_t_[receiver] = i * 1 / static_cast<double>(preferences_t_.size());
-            i++;
-        }
+    preferences_t_.insert({r, 1});
+    for (auto[receiver, p]: preferences_t_) {
+        preferences_t_[receiver] = 1 / static_cast<double>(preferences_t_.size());
     }
 }
 
 void ReceiverPreferences::remove_receiver(IPackageReceiver *r) {
     /** Funkcja usuwająca odbiorcę z kontenera preferences_t_ i zmieniająca wrtości dystrybuanty
     * dla każdego pozostałego odbiorcy tak aby suma wynosiła 1 **/
-
     if (preferences_t_.size() != 0) {
         preferences_t_.erase(r);
-        double sum = 0;
         for (auto[receiver, p]: preferences_t_) {
-            sum += p;
-        }
-        for (auto[receiver, p]: preferences_t_) {
-            preferences_t_[receiver] = p / sum;
+            preferences_t_[receiver] = 1 / static_cast<double>(preferences_t_.size());
         }
     }
 }
@@ -57,10 +33,11 @@ void ReceiverPreferences::remove_receiver(IPackageReceiver *r) {
 IPackageReceiver *ReceiverPreferences::choose_receiver() {
     /** Funkcja losująca wartość prawdopodobieństwa a następnie sprawdzająca, który z odbiorców w kontenerze
      * ma wartość dystrybuanty >= wylosowanemu prawdopodobieństwu **/
-
     double dist = pg_();
+    double current_dist = 0;
     for (auto[receiver, p]: preferences_t_) {
-        if (p >= dist) return receiver;
+        current_dist += p;
+        if (current_dist >= dist) return receiver;
     }
     return nullptr;
 }
@@ -96,8 +73,7 @@ void Worker::do_work(Time t) {
     if (!currently_processed_package.has_value()) {
         currently_processed_package = q_->pop();
         start_time_ = t;
-    }
-    else if (t == start_time_ + pd_ - 1) {
+    } else if (t == start_time_ + pd_ - 1) {
         push_package(std::move(currently_processed_package.value()));
         start_time_ = t;
         currently_processed_package = q_->pop();
