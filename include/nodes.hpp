@@ -169,7 +169,7 @@ private:
 
     std::unique_ptr<IPackageQueue> q_;
 
-    Package currently_processed_package;
+    std::optional<Package> currently_processed_package = std::nullopt;
 
 };
 

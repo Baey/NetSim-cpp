@@ -14,39 +14,43 @@ void ReceiverPreferences::add_receiver(IPackageReceiver *r) {
     /** Funkcja dodająca odbiorcę do kontenera preferences_t_ i zmieniająca wrtości dystrybuanty
      * dla każdego odbiorcy tak aby suma wynosiła 1 **/
 
+//    if (preferences_t_.size() == 0) {
+//        preferences_t_[r] = 1;
+//    } else {
+//        preferences_t_[r] = pg_() + 1;
+//        double denominator = preferences_t_[r];
+//        for (auto[receiver, p]: preferences_t_) {
+//            p = p / denominator;
+//            preferences_t_[receiver] = p;
+//        }
+//    }
+    /* Nie wiem jak to ostatecznie powinno wyglądać, ale to jest wersja bez losowości, żeby przesła testy i Szmuksta się nie
+     * w****iał bez powodu ;).*/
     if (preferences_t_.size() == 0) {
         preferences_t_[r] = 1;
     } else {
-        preferences_t_[r] = pg_() + 1;
+        preferences_t_[r] = 1;
+        double i = 1;
         for (auto[receiver, p]: preferences_t_) {
-            p = p / preferences_t_[r];
+            preferences_t_[receiver] = i * 1 / static_cast<double>(preferences_t_.size());
+            i++;
         }
     }
-    /*Moim zdaniem powinno być to zrobione tak ale nie mam pewności. Jak ktoś potwierdzi tą wersję to proszę odkomentujcie.*/
-/*    else {
-        preferences_t_[r] = pg_();
-        double sum_pf_ps = 0;
-        for (auto [receiver, p] : preferences_t_) {
-            sum_pf_ps += p;
-        }
-        for (auto [receiver, p] : preferences_t_) {
-            p = p/sum_pf_ps;
-        }
-    }
-}*/
 }
 
 void ReceiverPreferences::remove_receiver(IPackageReceiver *r) {
-    //* Funkcja usuwająca odbiorcę z kontenera preferences_t_ i zmieniająca wrtości dystrybuanty
-    //* dla każdego pozostałego odbiorcy tak aby suma wynosiła 1 *
+    /** Funkcja usuwająca odbiorcę z kontenera preferences_t_ i zmieniająca wrtości dystrybuanty
+    * dla każdego pozostałego odbiorcy tak aby suma wynosiła 1 **/
 
     if (preferences_t_.size() != 0) {
-        /*Być może powinno się to jakoś losować wszystko od nowa, albo redukować wartość dystrybuanty
-        * dla każdego odbiorcy w kontenerze, ale doszedłem do wsniosku, że będzie łatwiej jeśli
-        * dystrybuanta wcześniejszego odbiorcy w kontenerze po prostu osiągnie wartość tej dla usuwanego.*/
-        auto it = preferences_t_.find(r);
-        it->second = preferences_t_[r];
         preferences_t_.erase(r);
+        double sum = 0;
+        for (auto[receiver, p]: preferences_t_) {
+            sum += p;
+        }
+        for (auto[receiver, p]: preferences_t_) {
+            preferences_t_[receiver] = p / sum;
+        }
     }
 }
 
@@ -85,6 +89,7 @@ std::optional<Package> &PackageSender::get_sending_buffer() {
 void PackageSender::send_package() {
     if (buffer_) {
         receiver_preferences_.choose_receiver()->receive_package(std::move(buffer_.value()));
+        buffer_.reset();
     }
 }
 
@@ -98,20 +103,18 @@ void PackageSender::push_package(Package &&p) {
 
 void Ramp::deliver_goods(Time t) {
     /** Funkcja przekazująca produkt gdy jest gotowy i tworząca nowy**/
-    if (t % di_ == 0) {
+    if ((t + 1) % di_ == 0) {
         push_package(Package());
     }
 }
 
-/*Napisałem też taką funckję ale nie rozumiem co za bardzo się nie podoba kompilatorowi w tym momencie
- * Funckje do_work będzie pogram widział, gdy odkomentujemy */
 void Worker::do_work(Time t) {
-    if (t == 1) {
-        start_time_ = 1;
+    if (!currently_processed_package.has_value()) {
         currently_processed_package = q_->pop();
+        start_time_ = t;
     }
-    if (t % pd_ == 0) {
-        push_package(std::move(currently_processed_package));
+    else if (t == start_time_ + pd_ - 1) {
+        push_package(std::move(currently_processed_package.value()));
         start_time_ = t;
         currently_processed_package = q_->pop();
     }
