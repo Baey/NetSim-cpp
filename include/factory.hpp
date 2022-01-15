@@ -158,7 +158,7 @@ void NodeCollection<Node>::remove_by_id(ElementID id) {
 
 Factory load_factory_structure(std::istream& is);
 
-void save_factory_structure(Factory& factory, std::ostream& os);
+void save_factory_structure(Factory& worker, std::ostream& os);
 
 ParsedLineData parse_line(std::string line);
 

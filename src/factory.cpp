@@ -102,15 +102,90 @@ void Factory::remove_links(IPackageReceiver *receiver) {
     });
 }
 
-//TODO
-//Factory load_factory_structure(std::istream &is) {
-//    return Factory();
-//}
+Factory load_factory_structure(std::istream &is) {
+    Factory f;
+    std::string line;
+    while (std::getline(is,line)) {
+        if (line.front() != ';' && !line.empty()) {
+            ParsedLineData data = parse_line(line);
+            if (data.element_type_ == LOADING_RAMP)  f.add_ramp(Ramp(std::stoi(data.parameters_["id"]), std::stoi(data.parameters_["delivery-interval"])));
+            else if (data.element_type_ == WORKER) {
+                if (data.parameters_["queue-type"] == "FIFO")
+                    f.add_worker(Worker(std::stoi(data.parameters_["id"]), std::stoi(data.parameters_["processing-time"]), std::make_unique<PackageQueue>(PackageQueueType::FIFO)));
+                else
+                    f.add_worker(Worker(std::stoi(data.parameters_["id"]), std::stoi(data.parameters_["processing-time"]), std::make_unique<PackageQueue>(PackageQueueType::LIFO)));
+            }
+            else if(data.element_type_ == STOREHOUSE) f.add_storehouse(Storehouse(std::stoi(data.parameters_["id"])));
+            else if (data.element_type_ == LINK){
+                /* Z linkami już to nie wygląda tak jak ładnie, ponieważ wydaje mi się, że parse_line dostarcza mapę w stylu np. src : ramp-1.
+                 * Dlatego tutaj znowu trzeba dokonać tokenizacji, żeby rozdzielić typ RAMP oraz jego id 1. Pewnie da się to jakoś sprytnie zrobić
+                 * w zależności od typów no ale ja robię różne kombinacje po prostu (dużo kopiuj wklej). Jakby ktoś miał na to lepszy pomysł to
+                 * dawajcie znać! */
+                std::map<ElementType, ElementID> sender, receiver;
+                std::vector<std::string> type_id;
+                std::istringstream src_tokens_stream(data.parameters_["src"]), dest_tokens_stream(data.parameters_["dest"]);
+                std::string token;
+                while (std::getline(src_tokens_stream, token, '-')) {
+                    type_id.push_back(token);
+                }
+                if (type_id.front() == "ramp") sender[LOADING_RAMP] = std::stoi(type_id.back());
+                else if (type_id.front() == "worker") sender[WORKER] = std::stoi(type_id.back());
+                else throw std::invalid_argument("Invalid element type");
+                type_id.clear();
+                while (std::getline(dest_tokens_stream, token, '-')) {
+                    type_id.push_back(token);
+                }
+                if (type_id.front() == "worker") receiver[WORKER] = std::stoi(type_id.back());
+                else if (type_id.front() == "store") receiver[STOREHOUSE] = std::stoi(type_id.back());
+                else throw std::invalid_argument("Invalid element type");
+                if (sender.begin()->first == LOADING_RAMP && receiver.begin()->first == WORKER) {
+                    f.find_ramp_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_worker_by_id(receiver.begin()->second)));
+                }
+                else if (sender.begin()->first == WORKER && receiver.begin()->first == WORKER) {
+                    f.find_worker_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_worker_by_id(receiver.begin()->second)));
+                }
+                else if (sender.begin()->first == WORKER && receiver.begin()->first == STOREHOUSE) {
+                    f.find_worker_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_storehouse_by_id(receiver.begin()->second)));
+                }
+            }
+        }
+    }
+    return f;
+}
 
-//TODO
-//void save_factory_structure(Factory &factory, std::ostream &os) {
-//
-//}
+void save_factory_structure(Factory &factory, std::ostream &os) {
+    std::for_each(factory.ramp_cbegin(), factory.ramp_cend(), [&](auto &ramp){
+        os << "LOADING_RAMP id=" << ramp.get_id() << " delivery-interval=" << ramp.get_delivery_interval() << "\n";
+    });
+    std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&](auto &worker){
+        os << "WORKER id=" << worker.get_id() << " processing-time=" << worker.get_processing_duration() << " queue-type=" << worker.get_queue()->get_queue_type() <<"\n";
+    });
+    std::for_each(factory.storehouse_cbegin(), factory.storehouse_cend(), [&](auto &store){
+        os << "STOREHOUSE id=" << store.get_id() << "\n";
+    });
+    std::for_each(factory.ramp_cbegin(), factory.ramp_cend(), [&](auto &ramp){
+        for (auto &receiver_preferences : ramp.receiver_preferences_) {
+            std::stringstream type;
+            type << receiver_preferences.first->get_receiver_type();
+            std::string type_string(type.str());
+            std::for_each(type_string.begin(), type_string.end(), [](char & c){
+                c = std::tolower(c);
+            });
+            os << "LINK src=ramp-" << ramp.get_id() << " dest=" << type_string << "\n";
+        }
+    });
+    std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&](auto &worker){
+        for (auto &receiver_preferences : worker.receiver_preferences_) {
+            std::stringstream type;
+            type << receiver_preferences.first->get_receiver_type();
+            std::string type_string(type.str());
+            std::for_each(type_string.begin(), type_string.end(), [](char & c){
+                c = std::tolower(c);
+            });
+            os << "LINK src=worker-" << worker.get_id() << " dest=" << type_string << "\n";
+        }
+    });
+}
 
 ParsedLineData parse_line(std::string line) {
     ParsedLineData data;
@@ -121,7 +196,7 @@ ParsedLineData parse_line(std::string line) {
     while (std::getline(token_stream, token, delimiter)) {
         tokens.push_back(token);
     }
-    std::string r("LOADING_RAMP"), w("WORKER"), s("STOREHOUSE"), l("LINK"), c(";");
+    std::string r("LOADING_RAMP"), w("WORKER"), s("STOREHOUSE"), l("LINK");
     if(tokens.front() == r){
         data.element_type_ = ElementType::LOADING_RAMP;
     }
@@ -134,7 +209,7 @@ ParsedLineData parse_line(std::string line) {
     else if (tokens.front() == l){
         data.element_type_ = ElementType::LINK;
     }
-    else if (tokens.front() != c){
+    else {
         throw std::invalid_argument("Invalid element type");
     }
     for (auto it = std::next(tokens.begin()); it != tokens.end(); ++it) {
