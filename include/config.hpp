@@ -9,7 +9,7 @@
 #define REPORTING               4
 #define SIMULATION              5
 
-#define EXERCISE_ID EXERCISE_ID_FACTORY
+#define EXERCISE_ID REPORTING
 
 #if defined(EXERCISE_ID)
     #if EXERCISE_ID >= EXERCISE_ID_NODES

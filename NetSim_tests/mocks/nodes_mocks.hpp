@@ -21,15 +21,13 @@ public:
 
     MOCK_CONST_METHOD0(cend, IPackageStockpile::const_iterator());
 
-<<<<<<< HEAD
-//    #ifdef WITH_RECEIVER_TYPE
-    MOCK_CONST_METHOD0(get_receiver_type, ElementType());
-//    #endif
-=======
     #ifdef WITH_RECEIVER_TYPE
-    MOCK_CONST_METHOD0(get_receiver_type, ReceiverType());
+    MOCK_CONST_METHOD0(get_receiver_type, ElementType());
     #endif
->>>>>>> 6a77555d0cab570d8ffb2aa7c47cdd303a45f109
+
+//    #ifdef WITH_RECEIVER_TYPE
+//    MOCK_CONST_METHOD0(get_receiver_type, ReceiverType());
+//    #endif
 
     MOCK_CONST_METHOD0(get_id, ElementID());
 };

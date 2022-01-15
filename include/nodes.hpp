@@ -125,7 +125,7 @@ public:
 
     void deliver_goods(Time t);
 
-    TimeOffset get_deliver_interval() const { return di_; }
+    TimeOffset get_delivery_interval() const { return di_; }
 
     ElementID get_id() const { return id_; }
 

@@ -121,7 +121,7 @@ ParsedLineData parse_line(std::string line) {
     while (std::getline(token_stream, token, delimiter)) {
         tokens.push_back(token);
     }
-    std::string r("LOADING_RAMP"), w("WORKER"), s("STOREHOUSE"), l("LINK");
+    std::string r("LOADING_RAMP"), w("WORKER"), s("STOREHOUSE"), l("LINK"), c(";");
     if(tokens.front() == r){
         data.element_type_ = ElementType::LOADING_RAMP;
     }
@@ -134,7 +134,7 @@ ParsedLineData parse_line(std::string line) {
     else if (tokens.front() == l){
         data.element_type_ = ElementType::LINK;
     }
-    else{
+    else if (tokens.front() != c){
         throw std::invalid_argument("Invalid element type");
     }
     for (auto it = std::next(tokens.begin()); it != tokens.end(); ++it) {
