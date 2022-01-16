@@ -48,13 +48,31 @@ void generate_structure_report(const Factory& f, std::ostream& os) {
 }
 
 void generate_simulation_turn_report(const Factory& f, std::ostream& os, Time t) {
-    t = t + 1;
+/*    t = t + 1;
     f.worker_cbegin();
-    os << "Dupa";
-    /*os << "=== [ Turn: # ] ===" << "\n";
-    os << "" << "\n";
+    os << "Dupa";*/
+    os << "=== [ Turn: "<<std::to_string(t)<<" ] ===" << "\n" << "\n";
     os << "== WORKERS ==" << "\n";
     os << "" << "\n";
     std::for_each(f.worker_cbegin(), f.worker_cend(), [&](auto &worker){
-        os << "WORKER #" << worker.get_id() << "\n" << "  PBuffer: #" << worker. << "\n" << "  Queue: #" << worker. << "\n" << "  SBuffer: #" << worker. << "\n";*/
+        os << "WORKER #" << worker.get_id() << "\n" << "  PBuffer: #" << worker.get_processing_buffer() << " (pt = "<< worker.get_processing_duration()")" << "\n";
+        if(worker.get_queue()->empty()){
+            os<<"  Queue: (empty)\n";
+        }
+        else{
+            os<<"  Queue:";
+            for(auto j = worker.get_queue()->cbegin(); j!= worker.get_queue()->cend() ; j++){
+                if(j == worker.get_queue()->cbegin()){
+                    os<<" #"<<j->get_id();
+                }else{
+                    os<<", #"<<j->get_id();
+                }
+            }
+            os<<"\n";
+
+            if(bool(worker.get_queue()->get_sending_buffer())){
+                os<<"  SBuffer: #"<<worker.get_queue()->get_sending_buffer()->get_id()<<"\n";
+            }else{
+                os<<"  SBuffer: (empty)\n";
+            });
 }
