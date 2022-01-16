@@ -162,7 +162,9 @@ public:
 
     Time get_package_processing_start_time() const { return start_time_; }
 
-    IPackageQueue* get_queue() const {return q_.get(); }
+    IPackageQueue *get_queue() const { return q_.get(); }
+
+    std::optional<Package> &get_processing_buffer() { return processing_buffer_; }
 
 private:
     ElementID id_;
@@ -173,7 +175,7 @@ private:
 
     std::unique_ptr<IPackageQueue> q_;
 
-    std::optional<Package> currently_processed_package = std::nullopt;
+    std::optional<Package> processing_buffer_ = std::nullopt;
 
 };
 

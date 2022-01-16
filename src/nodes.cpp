@@ -70,12 +70,12 @@ void Ramp::deliver_goods(Time t) {
 }
 
 void Worker::do_work(Time t) {
-    if (!currently_processed_package.has_value()) {
-        currently_processed_package = q_->pop();
+    if (!processing_buffer_.has_value()) {
+        processing_buffer_ = q_->pop();
         start_time_ = t;
     } else if (t == start_time_ + pd_ - 1) {
-        push_package(std::move(currently_processed_package.value()));
+        push_package(std::move(processing_buffer_.value()));
         start_time_ = t;
-        currently_processed_package = q_->pop();
+        processing_buffer_ = q_->pop();
     }
 }
