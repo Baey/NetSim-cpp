@@ -5,9 +5,7 @@
 #include "reports.hpp"
 
 void generate_structure_report(const Factory& f, std::ostream& os) {
-    os << "" << "\n";
-    os << "== LOADING RAMPS ==" << "\n";
-    os << "" << "\n";
+    os << "\n" << "== LOADING RAMPS ==" << "\n" <<"\n";
     std::for_each(f.ramp_cbegin(), f.ramp_cend(), [&](auto &ramp){
         os << "LOADING RAMP #" << ramp.get_id() << "\n" << "  Delivery interval: " << ramp.get_delivery_interval() << "\n";
         os << "  Receivers:" << "\n";
@@ -19,11 +17,9 @@ void generate_structure_report(const Factory& f, std::ostream& os) {
                 os << "    storehouse #" << receiver_preferences.first->get_id() << "\n";
             }
         }
+        os << "\n";
     });
-    os << "" << "\n";
-    os << "" << "\n";
-    os << "== WORKERS ==" << "\n";
-    os << "" << "\n";
+    os << "\n" << "== WORKERS ==" << "\n" << "\n";
     std::for_each(f.worker_cbegin(), f.worker_cend(), [&](auto &worker){
         os << "WORKER #" << worker.get_id() << "\n" << "  Processing time: " << worker.get_processing_duration() << "\n";
         os << "  Queue type: " ;
@@ -42,15 +38,13 @@ void generate_structure_report(const Factory& f, std::ostream& os) {
                 os << "    storehouse #" << receiver_preferences.first->get_id() << "\n";
             }
         }
+        os << "\n";
     });
-    os << "" << "\n";
-    os << "" << "\n";
-    os << "== STOREHOUSES ==" << "\n";
-    os << "" << "\n";
+    os << "\n" << "== STOREHOUSES ==" << "\n" << "\n";
     std::for_each(f.storehouse_cbegin(), f.storehouse_cend(), [&](auto &store){
-        os << "STOREHOUSE #" << store.get_id() << "\n";
+        os << "STOREHOUSE #" << store.get_id() << "\n" << "\n";
+
     });
-    os << "" << "\n";
 }
 
 void generate_simulation_turn_report(const Factory& f, std::ostream& os, Time t) {

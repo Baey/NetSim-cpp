@@ -43,14 +43,14 @@ set(SOURCE_FILES
         src/helpers.cpp
         src/reports.cpp)
 
-add_executable(my_project_debug ${SOURCE_FILES} main.cpp)
+#add_executable(my_project_debug ${SOURCE_FILES} main.cpp)
 
 set(SOURCES_FILES_TESTS
         NetSim_tests/test/test_Factory
         NetSim_tests/test/test_factory_io.cpp
         NetSim_tests/test/test_nodes.cpp
         NetSim_tests/test/test_package.cpp
-        NetSim_tests/test/test_storage_types.cpp
+#        NetSim_tests/test/test_storage_types.cpp
         NetSim_tests/test/test_reports.cpp
         )
 
