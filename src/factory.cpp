@@ -141,7 +141,10 @@ Factory load_factory_structure(std::istream &is) {
                 if (sender.begin()->first == LOADING_RAMP && receiver.begin()->first == WORKER) {
                     f.find_ramp_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_worker_by_id(receiver.begin()->second)));
                 }
-                else if (sender.begin()->first == WORKER && receiver.begin()->first == WORKER) {
+                else if (sender.begin()->first == LOADING_RAMP && receiver.begin()->first == STOREHOUSE) {
+                    f.find_ramp_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_storehouse_by_id(receiver.begin()->second)));
+                }
+                else if (sender.begin()->first == WORKER && receiver.begin()->first == WORKER && sender.begin()->second != receiver.begin()->second) {
                     f.find_worker_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_worker_by_id(receiver.begin()->second)));
                 }
                 else if (sender.begin()->first == WORKER && receiver.begin()->first == STOREHOUSE) {

@@ -50,7 +50,7 @@ set(SOURCES_FILES_TESTS
         NetSim_tests/test/test_factory_io.cpp
         NetSim_tests/test/test_nodes.cpp
         NetSim_tests/test/test_package.cpp
-        NetSim_tests/test/test_storage_types.cpp
+#        NetSim_tests/test/test_storage_types.cpp
         )
 
 add_executable(my_project_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} NetSim_tests/test/main_gtest.cpp)
