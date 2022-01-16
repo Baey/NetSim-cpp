@@ -76,7 +76,7 @@ public:
 
     using ProbabilityGenerator = std::function<double()>;
 
-    explicit ReceiverPreferences(ProbabilityGenerator pg = default_probability_generator) : pg_(std::move(pg)) {}
+    explicit ReceiverPreferences(ProbabilityGenerator pg = probability_generator) : pg_(std::move(pg)) {}
 
     void add_receiver(IPackageReceiver *r);
 
