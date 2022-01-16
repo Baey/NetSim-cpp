@@ -144,7 +144,7 @@ Factory load_factory_structure(std::istream &is) {
                 else if (sender.begin()->first == LOADING_RAMP && receiver.begin()->first == STOREHOUSE) {
                     f.find_ramp_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_storehouse_by_id(receiver.begin()->second)));
                 }
-                else if (sender.begin()->first == WORKER && receiver.begin()->first == WORKER && sender.begin()->second != receiver.begin()->second) {
+                else if (sender.begin()->first == WORKER && receiver.begin()->first == WORKER) {
                     f.find_worker_by_id(sender.begin()->second)->receiver_preferences_.add_receiver(&(*f.find_worker_by_id(receiver.begin()->second)));
                 }
                 else if (sender.begin()->first == WORKER && receiver.begin()->first == STOREHOUSE) {
@@ -161,31 +161,32 @@ void save_factory_structure(Factory &factory, std::ostream &os) {
         os << "LOADING_RAMP id=" << ramp.get_id() << " delivery-interval=" << ramp.get_delivery_interval() << "\n";
     });
     std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&](auto &worker){
-        os << "WORKER id=" << worker.get_id() << " processing-time=" << worker.get_processing_duration() << " queue-type=" << worker.get_queue()->get_queue_type() <<"\n";
+        if (worker.get_queue()->get_queue_type() == LIFO)
+            os << "WORKER id=" << worker.get_id() << " processing-time=" << worker.get_processing_duration() << " queue-type=LIFO" <<"\n";
+        else
+            os << "WORKER id=" << worker.get_id() << " processing-time=" << worker.get_processing_duration() << " queue-type=FIFO" <<"\n";
     });
     std::for_each(factory.storehouse_cbegin(), factory.storehouse_cend(), [&](auto &store){
         os << "STOREHOUSE id=" << store.get_id() << "\n";
     });
     std::for_each(factory.ramp_cbegin(), factory.ramp_cend(), [&](auto &ramp){
         for (auto &receiver_preferences : ramp.receiver_preferences_) {
-            std::stringstream type;
-            type << receiver_preferences.first->get_receiver_type();
-            std::string type_string(type.str());
-            std::for_each(type_string.begin(), type_string.end(), [](char & c){
-                c = std::tolower(c);
-            });
-            os << "LINK src=ramp-" << ramp.get_id() << " dest=" << type_string << "\n";
+            if (receiver_preferences.first->get_receiver_type() == WORKER) {
+                os << "LINK src=ramp-" << ramp.get_id() << " dest=worker-" << receiver_preferences.first->get_id() << "\n";
+            }
+            else {
+                os << "LINK src=ramp-" << ramp.get_id() << " dest=store-" << receiver_preferences.first->get_id() << "\n";
+            }
         }
     });
     std::for_each(factory.worker_cbegin(), factory.worker_cend(), [&](auto &worker){
         for (auto &receiver_preferences : worker.receiver_preferences_) {
-            std::stringstream type;
-            type << receiver_preferences.first->get_receiver_type();
-            std::string type_string(type.str());
-            std::for_each(type_string.begin(), type_string.end(), [](char & c){
-                c = std::tolower(c);
-            });
-            os << "LINK src=worker-" << worker.get_id() << " dest=" << type_string << "\n";
+            if (receiver_preferences.first->get_receiver_type() == WORKER) {
+                os << "LINK src=worker-" << worker.get_id() << " dest=worker-" << receiver_preferences.first->get_id() << "\n";
+            }
+            else {
+                os << "LINK src=worker-" << worker.get_id() << " dest=store-" << receiver_preferences.first->get_id() << "\n";
+            }
         }
     });
 }
