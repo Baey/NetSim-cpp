@@ -42,11 +42,6 @@ IPackageReceiver *ReceiverPreferences::choose_receiver() {
     return nullptr;
 }
 
-std::optional<Package> &PackageSender::get_sending_buffer() {
-    /** Funkcja zwracająca zawartość buforu kiedy ten nie jest pusty, w przeciwnym przypadku zwraca nullptr **/
-    return buffer_;
-}
-
 void PackageSender::send_package() {
     if (buffer_) {
         receiver_preferences_.choose_receiver()->receive_package(std::move(buffer_.value()));
@@ -64,18 +59,31 @@ void PackageSender::push_package(Package &&p) {
 
 void Ramp::deliver_goods(Time t) {
     /** Funkcja przekazująca produkt gdy jest gotowy i tworząca nowy**/
-    if ((t + 1) % di_ == 0) {
+    if (t % di_ == 1) {
         push_package(Package());
     }
 }
 
 void Worker::do_work(Time t) {
-    if (!processing_buffer_.has_value()) {
+//    if (!processing_buffer_.has_value()) {
+//        if (!q_->empty()) {
+//            processing_buffer_ = q_->pop();
+//            start_time_ = t;
+//        }
+//    } else if (t == start_time_ + pd_ - 1) {
+//        push_package(std::move(processing_buffer_.value()));
+//        processing_buffer_.reset();
+//        if (!q_->empty()) {
+//            processing_buffer_ = q_->pop();
+//            start_time_ = t;
+//        }
+//    }
+    if (!processing_buffer_.has_value() && !q_->empty()) {
         processing_buffer_ = q_->pop();
         start_time_ = t;
-    } else if (t == start_time_ + pd_ - 1) {
+    }
+    if ((t - start_time_ + 1) % pd_ == 0) {
         push_package(std::move(processing_buffer_.value()));
-        start_time_ = t;
-        processing_buffer_ = q_->pop();
+        processing_buffer_.reset();
     }
 }

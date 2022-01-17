@@ -49,35 +49,44 @@ void generate_structure_report(const Factory &f, std::ostream &os) {
 }
 
 void generate_simulation_turn_report(const Factory &f, std::ostream &os, Time t) {
-    f.find_worker_by_id(1);
-    os << ' ';
-    t += 1;
-//    os << "=== [ Turn: " << std::to_string(t) << " ] ===" << "\n" << "\n";
-//    os << "== WORKERS ==" << "\n";
-//    os << "" << "\n";
-//    std::for_each(f.worker_cbegin(), f.worker_cend(), [&](auto &worker) {
-//        os << "WORKER #" << worker.get_id() << "\n" << "  PBuffer: #" << worker.get_processing_buffer() << " (pt = "
-//           << worker.get_processing_duration() << ")" << "\n";
-//        if (worker.get_queue()->empty()) {
-//            os << "  Queue: (empty)\n";
-//        } else {
-//            os << "  Queue:";
-//            for (auto j = worker.get_queue()->cbegin(); j != worker.get_queue()->cend(); j++) {
-//                if (j == worker.get_queue()->cbegin()) {
-//                    os << " #" << j->get_id();
-//                } else {
-//                    os << ", #" << j->get_id();
-//                }
-//            }
-//            os << "\n";
-//
-//            if (bool(worker.get_queue()->get_sending_buffer())) {
-//                os << "  SBuffer: #" << worker.get_queue()->get_sending_buffer()->get_id() << "\n";
-//            } else {
-//                os << "  SBuffer: (empty)\n";
-//            }
-//        }
-//    });
+    os << "=== [ Turn: " << t << " ] ===" << "\n" << "\n";
+    os << "== WORKERS ==" << "\n";
+    for (auto it = f.worker_cbegin(); it != f.worker_cend(); ++it) {
+        const auto &worker = *(it);
+        os << "\nWORKER #" << worker.get_id() << "\n";
+        os << "  PBuffer: ";
+        if (worker.get_processing_buffer().has_value()) {
+            os << "#" << worker.get_processing_buffer().value().get_id() << " (pt = " << t - worker.get_package_processing_start_time() + 1 << ")\n";
+        }
+        else os << "(empty)\n";
+        os << "  Queue: ";
+        if (!worker.get_queue()->empty()) {
+            for (auto it2 = worker.get_queue()->cbegin(); it2 != worker.get_queue()->cend(); ++it2) {
+                os << "#" << it2->get_id();
+                if (std::next(it2) != worker.get_queue()->cend()) os << ", ";
+            }
+            os << "\n";
+        }
+        else os << "(empty)\n";
+        os << "  SBuffer: ";
+        if (worker.get_sending_buffer().has_value()) os << "#" << worker.get_sending_buffer().value().get_id() << "\n";
+        else os << "(empty)\n";
+    }
+    os << "\n\n== STOREHOUSES ==" << "\n";
+    for (auto it = f.storehouse_cbegin(); it != f.storehouse_cend(); ++it) {
+        const auto &storehouse = *(it);
+        os << "\nSTOREHOUSE #" << storehouse.get_id() << "\n";
+        os << "  Stock: ";
+        if (storehouse.cbegin() != storehouse.cend()) {
+            for (auto it2 = storehouse.cbegin(); it2 != storehouse.cend(); ++it2) {
+                os << "#" << it2->get_id();
+                if (std::next(it2) != storehouse.cend()) os << ", ";
+            }
+            os << "\n";
+        }
+        else os << "(empty)\n";
+        os << "\n";
+    }
 }
 
 std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPreferences& receiver_preferences) {

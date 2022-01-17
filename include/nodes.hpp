@@ -110,7 +110,7 @@ public:
 
     void push_package(Package &&p);
 
-    std::optional<Package> &get_sending_buffer();
+    std::optional<Package> const &get_sending_buffer() const { return buffer_; }
 
     ReceiverPreferences receiver_preferences_;
 
@@ -164,7 +164,7 @@ public:
 
     IPackageQueue *get_queue() const { return q_.get(); }
 
-    std::optional<Package> &get_processing_buffer() { return processing_buffer_; }
+    std::optional<Package> const &get_processing_buffer() const { return processing_buffer_; }
 
 private:
     ElementID id_;
