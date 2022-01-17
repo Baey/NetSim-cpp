@@ -50,13 +50,13 @@ set(SOURCES_FILES_TESTS
         NetSim_tests/test/test_factory_io.cpp
         NetSim_tests/test/test_nodes.cpp
         NetSim_tests/test/test_package.cpp
-#        NetSim_tests/test/test_storage_types.cpp
+        NetSim_tests/test/test_storage_types.cpp
         NetSim_tests/test/test_reports.cpp
         )
 
-add_executable(my_project_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} NetSim_tests/test/main_gtest.cpp)
+add_executable(NetSim_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} NetSim_tests/test/main_gtest.cpp)
 
-target_include_directories(my_project_test PUBLIC
+target_include_directories(NetSim_test PUBLIC
         NetSim_tests/lib/googlemock/include
         NetSim_tests/lib/googletest/include
         NetSim_tests/mocks
@@ -64,6 +64,6 @@ target_include_directories(my_project_test PUBLIC
 
 #add_subdirectory(NetSim_tests/lib)
 
-target_link_libraries(my_project_test gmock)
+target_link_libraries(NetSim_test gmock)
 
 add_executable(NetSim ${SOURCE_FILES})
