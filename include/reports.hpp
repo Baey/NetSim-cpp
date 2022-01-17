@@ -17,4 +17,23 @@ void generate_simulation_turn_report(const Factory& f, std::ostream& os, Time t)
 
 std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPreferences& receiver_preferences);
 
+class SpecificTurnsReportNotifier {
+public:
+    SpecificTurnsReportNotifier(std::set<Time> turns) : turns_(turns) {}
+
+    bool should_generate(Time t);
+
+private:
+    std::set<Time> turns_;
+};
+
+class IntervalReportNotifier {
+public:
+    IntervalReportNotifier(TimeOffset to) : to_(to) {}
+
+    bool should_generate(Time t);
+
+private:
+    TimeOffset to_;
+};
 #endif //NETSIM_REPORTS_HPP

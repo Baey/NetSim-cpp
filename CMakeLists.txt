@@ -9,7 +9,7 @@ include_directories(
 )
 
 #Add the google test subdirectory
-add_subdirectory(NetSim_tests/lib)
+add_subdirectory(NetSim_test/lib)
 
 #include googletest/include dir
 #include_directories(NetSim_tests/lib/googletest/include)
@@ -35,31 +35,35 @@ set(SOURCE_FILES
         include/helpers.hpp
         include/factory.hpp
         include/reports.hpp
+        include/simulation.hpp
 
         src/package.cpp
         src/storage_types.cpp
         src/nodes.cpp
         src/factory.cpp
         src/helpers.cpp
-        src/reports.cpp)
+        src/reports.cpp
+        src/simulation.cpp
+        )
 
 #add_executable(my_project_debug ${SOURCE_FILES} main.cpp)
 
 set(SOURCES_FILES_TESTS
-        NetSim_tests/test/test_Factory
-        NetSim_tests/test/test_factory_io.cpp
-        NetSim_tests/test/test_nodes.cpp
-        NetSim_tests/test/test_package.cpp
-        NetSim_tests/test/test_storage_types.cpp
-        NetSim_tests/test/test_reports.cpp
+        NetSim_test/tests/test_Factory
+        NetSim_test/tests/test_factory_io.cpp
+        NetSim_test/tests/test_nodes.cpp
+        NetSim_test/tests/test_package.cpp
+        NetSim_test/tests/test_storage_types.cpp
+        NetSim_test/tests/test_reports.cpp
+        NetSim_test/tests/test_simulate.cpp
         )
 
-add_executable(NetSim_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} NetSim_tests/test/main_gtest.cpp)
+add_executable(NetSim_test ${SOURCE_FILES} ${SOURCES_FILES_TESTS} NetSim_test/tests/main_gtest.cpp)
 
 target_include_directories(NetSim_test PUBLIC
-        NetSim_tests/lib/googlemock/include
-        NetSim_tests/lib/googletest/include
-        NetSim_tests/mocks
+        NetSim_test/lib/googlemock/include
+        NetSim_test/lib/googletest/include
+        NetSim_test/mocks
         )
 
 #add_subdirectory(NetSim_tests/lib)
