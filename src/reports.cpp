@@ -10,11 +10,12 @@ void generate_structure_report(const Factory &f, std::ostream &os) {
         os << "LOADING RAMP #" << ramp.get_id() << "\n" << "  Delivery interval: " << ramp.get_delivery_interval()
            << "\n";
         os << "  Receivers:" << "\n";
-        for (auto &receiver_preferences: ramp.receiver_preferences_) {
-            if (receiver_preferences.first->get_receiver_type() == WORKER) {
-                os << "    worker #" << receiver_preferences.first->get_id() << "\n";
+        auto sorted_receivers = sort_map(ramp.receiver_preferences_);
+        for (auto &receiver : sorted_receivers) {
+            if (receiver.first->get_receiver_type() == WORKER) {
+                os << "    worker #" << receiver.first->get_id() << "\n";
             } else {
-                os << "    storehouse #" << receiver_preferences.first->get_id() << "\n";
+                os << "    storehouse #" << receiver.first->get_id() << "\n";
             }
         }
         os << "\n";
@@ -31,11 +32,11 @@ void generate_structure_report(const Factory &f, std::ostream &os) {
         }
         os << "  Receivers:" << "\n";
         auto sorted_receivers = sort_map(worker.receiver_preferences_);
-        for (auto &receiver_preferences: worker.receiver_preferences_) {
-            if (receiver_preferences.first->get_receiver_type() == WORKER) {
-                os << "    worker #" << receiver_preferences.first->get_id() << "\n";
+        for (auto &receiver: sorted_receivers ) {
+            if (receiver.first->get_receiver_type() == WORKER) {
+                os << "    worker #" << receiver.first->get_id() << "\n";
             } else {
-                os << "    storehouse #" << receiver_preferences.first->get_id() << "\n";
+                os << "    storehouse #" << receiver.first->get_id() << "\n";
             }
         }
         os << "\n";
