@@ -21,7 +21,7 @@ class SpecificTurnsReportNotifier {
 public:
     SpecificTurnsReportNotifier(std::set<Time> turns) : turns_(turns) {}
 
-    bool should_generate(Time t);
+    bool should_generate(Time t) { return turns_.find(t) != turns_.end(); }
 
 private:
     std::set<Time> turns_;
@@ -31,7 +31,7 @@ class IntervalReportNotifier {
 public:
     IntervalReportNotifier(TimeOffset to) : to_(to) {}
 
-    bool should_generate(Time t);
+    bool should_generate(Time t) { return t % to_ == 1; }
 
 private:
     TimeOffset to_;
