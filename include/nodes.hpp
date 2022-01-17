@@ -17,8 +17,8 @@
 
 enum ElementType {
     LOADING_RAMP,
-    WORKER,
     STOREHOUSE,
+    WORKER,
     LINK
 };
 
