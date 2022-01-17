@@ -65,24 +65,11 @@ void Ramp::deliver_goods(Time t) {
 }
 
 void Worker::do_work(Time t) {
-//    if (!processing_buffer_.has_value()) {
-//        if (!q_->empty()) {
-//            processing_buffer_ = q_->pop();
-//            start_time_ = t;
-//        }
-//    } else if (t == start_time_ + pd_ - 1) {
-//        push_package(std::move(processing_buffer_.value()));
-//        processing_buffer_.reset();
-//        if (!q_->empty()) {
-//            processing_buffer_ = q_->pop();
-//            start_time_ = t;
-//        }
-//    }
     if (!processing_buffer_.has_value() && !q_->empty()) {
         processing_buffer_ = q_->pop();
         start_time_ = t;
     }
-    if ((t - start_time_ + 1) % pd_ == 0) {
+    if (t - start_time_ + 1 == pd_) {
         push_package(std::move(processing_buffer_.value()));
         processing_buffer_.reset();
     }
