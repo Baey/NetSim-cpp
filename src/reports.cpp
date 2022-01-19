@@ -4,48 +4,78 @@
 #include <iostream>
 #include "reports.hpp"
 
-void generate_structure_report(const Factory &f, std::ostream &os) {
+void generate_structure_report(const Factory &f, std::ostream  &os) {
     os << "\n" << "== LOADING RAMPS ==" << "\n" << "\n";
-    std::for_each(f.ramp_cbegin(), f.ramp_cend(), [&](auto &ramp) {
-        os << "LOADING RAMP #" << ramp.get_id() << "\n" << "  Delivery interval: " << ramp.get_delivery_interval()
-           << "\n";
-        os << "  Receivers:" << "\n";
-        auto sorted_receivers = sort_map(ramp.receiver_preferences_);
-        for (auto &receiver : sorted_receivers) {
-            if (receiver.first->get_receiver_type() == WORKER) {
-                os << "    worker #" << receiver.first->get_id() << "\n";
-            } else {
-                os << "    storehouse #" << receiver.first->get_id() << "\n";
+    auto it_r = f.ramp_cbegin();
+    ElementID id = 1;
+    while (it_r != f.ramp_cend()) {
+        for (auto it = f.ramp_cbegin(); it != f.ramp_cend(); it++) {
+            const auto& ramp = *it;
+            if (id == ramp.get_id()) {
+                os << "LOADING RAMP #" << ramp.get_id() << "\n" << "  Delivery interval: "
+                   << ramp.get_delivery_interval()
+                   << "\n";
+                os << "  Receivers:" << "\n";
+                auto sorted_receivers = sort_map(ramp.receiver_preferences_);
+                for (auto &receiver: sorted_receivers) {
+                    if (receiver.first->get_receiver_type() == WORKER) {
+                        os << "    worker #" << receiver.first->get_id() << "\n";
+                    } else {
+                        os << "    storehouse #" << receiver.first->get_id() << "\n";
+                    }
+                }
+                os << "\n";
+                ++it_r;
+                break;
             }
         }
-        os << "\n";
-    });
+        ++id;
+    }
     os << "\n" << "== WORKERS ==" << "\n" << "\n";
-    std::for_each(f.worker_cbegin(), f.worker_cend(), [&](auto &worker) {
-        os << "WORKER #" << worker.get_id() << "\n" << "  Processing time: " << worker.get_processing_duration()
-           << "\n";
-        os << "  Queue type: ";
-        if (worker.get_queue()->get_queue_type() == LIFO) {
-            os << "LIFO" << "\n";
-        } else {
-            os << "FIFO" << "\n";
-        }
-        os << "  Receivers:" << "\n";
-        auto sorted_receivers = sort_map(worker.receiver_preferences_);
-        for (auto &receiver: sorted_receivers ) {
-            if (receiver.first->get_receiver_type() == WORKER) {
-                os << "    worker #" << receiver.first->get_id() << "\n";
-            } else {
-                os << "    storehouse #" << receiver.first->get_id() << "\n";
+    auto it_w = f.worker_cbegin();
+    id = 1;
+    while (it_w != f.worker_cend()) {
+        for(auto it = f.worker_cbegin(); it != f.worker_cend(); it++) {
+            const auto& worker = *it;
+            if (id == worker.get_id()) {
+                os << "WORKER #" << worker.get_id() << "\n" << "  Processing time: " << worker.get_processing_duration()
+                   << "\n";
+                os << "  Queue type: ";
+                if (worker.get_queue()->get_queue_type() == LIFO) {
+                    os << "LIFO" << "\n";
+                } else {
+                    os << "FIFO" << "\n";
+                }
+                os << "  Receivers:" << "\n";
+                auto sorted_receivers = sort_map(worker.receiver_preferences_);
+                for (auto &receiver: sorted_receivers) {
+                    if (receiver.first->get_receiver_type() == WORKER) {
+                        os << "    worker #" << receiver.first->get_id() << "\n";
+                    } else {
+                        os << "    storehouse #" << receiver.first->get_id() << "\n";
+                    }
+                }
+                os << "\n";
+                ++it_w;
+                break;
             }
         }
-        os << "\n";
-    });
+        ++id;
+    }
     os << "\n" << "== STOREHOUSES ==" << "\n" << "\n";
-    std::for_each(f.storehouse_cbegin(), f.storehouse_cend(), [&](auto &store) {
-        os << "STOREHOUSE #" << store.get_id() << "\n" << "\n";
-
-    });
+    auto it_s = f.storehouse_cbegin();
+    id = 1;
+    while (it_s != f.storehouse_cend()) {
+        for(auto it = f.storehouse_cbegin(); it != f.storehouse_cend(); it++) {
+            const auto& store = *it;
+            if (id == store.get_id()) {
+                os << "STOREHOUSE #" << store.get_id() << "\n" << "\n";
+                ++it_s;
+                break;
+            }
+        }
+        ++id;
+    }
 }
 
 void generate_simulation_turn_report(const Factory &f, std::ostream &os, Time t) {
@@ -105,14 +135,4 @@ std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPrefer
                   return l.first->get_receiver_type() < r.first->get_receiver_type();
               });
     return sorted_receivers;
-}
-
-template<class Node>
-std::vector<Node> sort_nodes(NodeCollection<Node> &collection) {
-    std::vector<Worker> sorted_nodes;
-    std::copy(collection.begin(), collection.end(), std::back_inserter(sorted_nodes));
-    std::sort(sorted_nodes.begin(), sorted_nodes.end(), [](const Node& l, const Node& r) {
-        return l.get_id() < r.get_id();
-    });
-    return sorted_nodes;
 }

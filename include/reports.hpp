@@ -17,9 +17,6 @@ void generate_simulation_turn_report(const Factory& f, std::ostream& os, Time t)
 
 std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPreferences& receiver_preferences);
 
-template<class Node>
-std::vector<Node> sort_nodes(NodeCollection<Node>& collection);
-
 class SpecificTurnsReportNotifier {
 public:
     SpecificTurnsReportNotifier(std::set<Time> turns) : turns_(turns) {}
