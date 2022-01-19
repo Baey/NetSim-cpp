@@ -89,7 +89,7 @@ void generate_simulation_turn_report(const Factory &f, std::ostream &os, Time t)
     }
 }
 
-std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPreferences& receiver_preferences) {
+std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPreferences &receiver_preferences) {
     typedef std::pair<IPackageReceiver *, double> pair;
     std::vector<pair> sorted_receivers;
     std::copy(receiver_preferences.begin(),
@@ -97,14 +97,22 @@ std::vector<std::pair<IPackageReceiver *, double>> sort_map(const ReceiverPrefer
               std::back_inserter<std::vector<pair>>(sorted_receivers));
 
     std::sort(sorted_receivers.begin(), sorted_receivers.end(),
-              [](const pair &l, const pair &r)
-              {
+              [](const pair &l, const pair &r) {
                   return l.first->get_id() < r.first->get_id();
               });
     std::sort(sorted_receivers.begin(), sorted_receivers.end(),
-              [](const pair &l, const pair &r)
-              {
+              [](const pair &l, const pair &r) {
                   return l.first->get_receiver_type() < r.first->get_receiver_type();
               });
     return sorted_receivers;
+}
+
+template<class Node>
+std::vector<Node> sort_nodes(NodeCollection<Node> &collection) {
+    std::vector<Worker> sorted_nodes;
+    std::copy(collection.begin(), collection.end(), std::back_inserter(sorted_nodes));
+    std::sort(sorted_nodes.begin(), sorted_nodes.end(), [](const Node& l, const Node& r) {
+        return l.get_id() < r.get_id();
+    });
+    return sorted_nodes;
 }
